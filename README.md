@@ -15,7 +15,7 @@ building or updating a dliu.com app, point the developer or AI agent to that URL
 | `public/favicon.png` | https://files.dliu.com/dliu.com/favicon.png (the DL icon, 512 × 512) |
 
 Everything under `public/` is published to `https://files.dliu.com/dliu.com/` by
-[files.dliu.com](https://github.com/dliu-com/file-server), which serves it from CloudFront with a 5-minute cache.
+[files.dliu.com](https://github.com/dliu-com/file-server), which serves it through CloudFront. Browsers keep a copy for 5 minutes; replacing a file clears the CDN copy automatically within about a minute.
 
 ## Changing it
 
