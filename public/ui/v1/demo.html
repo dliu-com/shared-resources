@@ -7,6 +7,7 @@
   <meta name="robots" content="noindex">
   <link rel="icon" type="image/png" href="https://files.dliu.com/dliu.com/favicon.png">
   <link rel="stylesheet" href="https://files.dliu.com/dliu.com/ui/v1/dl.css">
+  <link rel="stylesheet" href="https://files.dliu.com/dliu.com/ui/v1/dl-docs.css">
 </head>
 <body class="dl-page">
   <header class="dl-header">
@@ -17,6 +18,13 @@
       <a class="dl-nav-link" href="#buttons">Buttons</a>
       <a class="dl-button" href="#">Docs</a>
       <a class="dl-button dl-signin" href="#">Sign in</a>
+      <div class="dl-language">
+        <button type="button" class="dl-button dl-language-toggle" aria-controls="dl-languages" aria-expanded="false" aria-label="Language / 语言">文/A</button>
+        <div id="dl-languages" class="dl-languages" role="group" aria-label="Language / 语言">
+          <button type="button" data-language="zh" lang="zh-CN" aria-pressed="false">中文</button>
+          <button type="button" data-language="en" lang="en" aria-pressed="true">English</button>
+        </div>
+      </div>
     </nav>
   </header>
 
@@ -53,6 +61,30 @@
         <a class="dl-button" href="#">Sign out</a>
       </nav>
     </header>
+
+    <h2>Tabs</h2>
+    <nav class="dl-tabs" aria-label="Example tabs"><a href="#" aria-current="page">Technical architecture</a><a href="#">Cost</a><a href="#">Security</a><a href="#">API</a></nav>
+
+    <h2>Card, table and notice</h2>
+    <p class="dl-notice">Saved. The notice is green; add dl-error for a red one.</p>
+    <p class="dl-notice dl-error">Could not save.</p>
+    <div class="dl-card">
+      <div class="dl-table-wrap"><table class="dl-table">
+        <thead><tr><th>Site</th><th class="dl-num">Views</th></tr></thead>
+        <tbody><tr><td>video.dliu.com</td><td class="dl-num">1,204</td></tr><tr><td>blog.dliu.com</td><td class="dl-num">980</td></tr></tbody>
+      </table></div>
+    </div>
+
+    <h2>Docs page (dl-docs.css)</h2>
+    <article class="dl-docs">
+      <p class="lead">Docs, About and How it works pages also load dl-docs.css: article text, tables, code and the dg-* diagram kit.</p>
+      <div class="dg-stats">
+        <div class="dg-stat"><span class="dg-icon"></span><span class="dg-text"><strong>0 servers</strong><small>nothing runs while nobody is using it</small></span></div>
+        <div class="dg-stat"><span class="dg-icon"></span><span class="dg-text"><strong>1 Lambda</strong><small>only for sign-in and changes</small></span></div>
+      </div>
+      <p>Inline <code>code</code> and a callout:</p>
+      <div class="dg-callout">Pages may be framed only by dliu.com sites.</div>
+    </article>
 
     <h2>Panel and form fields</h2>
     <div class="dl-panel">

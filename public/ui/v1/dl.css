@@ -133,10 +133,65 @@
 
 /* ---------- Content helpers ---------- */
 .dl-panel { padding: 18px; border: 1px solid var(--dl-line); border-radius: var(--dl-radius); background: var(--dl-panel); }
+.dl-card { padding: 16px; border: 1px solid var(--dl-line); border-radius: var(--dl-radius); background: var(--dl-surface); min-width: 0; }
+.dl-notice { margin: 0 0 16px; padding: 10px 14px; border: 1px solid #b7e1c1; border-radius: var(--dl-radius-small); background: #eef9f1; }
+.dl-notice.dl-error { border-color: #f1b8bc; background: #fdf0f1; }
 .dl-muted { color: var(--dl-muted); }
 .dl-error { color: var(--dl-danger); }
 .dl-success { color: var(--dl-ok); }
 .dl-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Tables ----------
+   <div class="dl-table-wrap"><table class="dl-table">…</table></div>; td.dl-num / th.dl-num for numbers. */
+.dl-table-wrap { overflow-x: auto; }
+.dl-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.dl-table th, .dl-table td { padding: 8px 10px; border-bottom: 1px solid var(--dl-line); text-align: left; vertical-align: top; }
+.dl-table th { color: var(--dl-muted); font-weight: 600; white-space: nowrap; }
+.dl-table tr:last-child td { border-bottom: 0; }
+.dl-table .dl-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---------- Tabs ----------
+   <nav class="dl-tabs" aria-label="Sections"><a href="#a" aria-current="page">A</a><a href="#b">B</a></nav>
+   Links or buttons; aria-current="page" or aria-selected="true" marks the open tab. */
+.dl-tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; margin: 4px 0 18px; border-bottom: 1px solid var(--dl-line); }
+.dl-tabs::-webkit-scrollbar { display: none; }
+.dl-tabs > a, .dl-tabs > button {
+  flex: none; margin-bottom: -1px; padding: 9px 14px; border: 0; border-bottom: 3px solid transparent; background: none;
+  color: var(--dl-muted); font: 600 15px var(--dl-font); text-decoration: none; cursor: pointer;
+}
+.dl-tabs > a:hover, .dl-tabs > button:hover { color: var(--dl-accent); text-decoration: none; }
+.dl-tabs > [aria-current], .dl-tabs > [aria-selected="true"] { color: var(--dl-text); border-bottom-color: var(--dl-accent); }
+
+/* ---------- Language switcher (sites in Chinese and English) ----------
+   Last item in the header's dl-nav. The site's script sets aria-pressed on the language buttons, and on
+   narrow screens toggles .is-open on .dl-languages (and aria-expanded on the toggle) when 文/A is pressed.
+   <div class="dl-language">
+     <button type="button" class="dl-button dl-language-toggle" aria-controls="dl-languages" aria-expanded="false" aria-label="Language / 语言">文/A</button>
+     <div id="dl-languages" class="dl-languages" role="group" aria-label="Language / 语言">
+       <button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button>
+       <button type="button" data-language="en" lang="en" aria-pressed="false">English</button>
+     </div>
+   </div> */
+.dl-language { position: relative; display: flex; }
+.dl-languages { display: inline-flex; border: 1px solid var(--dl-line); border-radius: var(--dl-radius-small); overflow: hidden; background: var(--dl-surface); }
+.dl-languages > button {
+  padding: 7px 10px; border: 0; border-left: 1px solid var(--dl-line); background: none;
+  color: var(--dl-text); font: 500 13px var(--dl-font); cursor: pointer;
+}
+.dl-languages > button:first-child { border-left: 0; }
+.dl-languages > button:hover { background: var(--dl-panel); }
+.dl-languages > button[aria-pressed="true"] { background: var(--dl-accent-soft); color: var(--dl-accent); font-weight: 600; }
+.dl-button.dl-language-toggle { display: none; padding: 8px 10px; font-size: 13px; }
+@media (max-width: 600px) {
+  .dl-button.dl-language-toggle { display: inline-flex; }
+  .dl-languages { display: none; }
+  .dl-languages.is-open {
+    display: flex; flex-direction: column; position: absolute; top: calc(100% + 6px); right: 0; z-index: 30; min-width: 120px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  }
+  .dl-languages.is-open > button { border-left: 0; border-top: 1px solid var(--dl-line); padding: 10px 14px; text-align: left; }
+  .dl-languages.is-open > button:first-child { border-top: 0; }
+}
 
 /* ---------- Phones and touch screens ---------- */
 @media (max-width: 400px) {
@@ -144,9 +199,13 @@
   .dl-nav { gap: 6px; }
   .dl-nav .dl-button { padding: 8px 10px; }
 }
+@media (max-width: 640px) {
+  .dl-tabs > a, .dl-tabs > button { padding: 8px 10px; font-size: 14px; }
+}
 /* Bigger targets, and 16px text so iOS doesn't zoom into fields. */
 @media (pointer: coarse) {
   .dl-button:not(.dl-button-link) { min-height: 44px; }
+  .dl-languages > button { min-height: 44px; }
   .dl-nav-link { display: inline-flex; align-items: center; min-height: 44px; }
   :where(input:not([type]), input[type=text], input[type=search], input[type=email], input[type=url], input[type=number], input[type=password], input[type=tel], textarea, select) { font-size: 16px; }
 }

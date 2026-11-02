@@ -1,0 +1,15 @@
+[
+  { "site": "dliu.com", "repo": "dliu-com/home-site", "pages": ["https://dliu.com/"] },
+  { "site": "home.dliu.com", "repo": "deweiliu/home", "pages": ["https://home.dliu.com/"] },
+  { "site": "video.dliu.com", "repo": "dliu-com/video", "pages": ["https://video.dliu.com/"], "docs": ["https://video.dliu.com/docs", "https://video.dliu.com/docs/api"] },
+  { "site": "blog.dliu.com", "repo": "dliu-com/blog", "pages": ["https://blog.dliu.com/"], "docs": ["https://blog.dliu.com/docs", "https://blog.dliu.com/docs/api"] },
+  { "site": "files.dliu.com", "repo": "dliu-com/file-server", "pages": ["https://files.dliu.com/"], "docs": ["https://files.dliu.com/docs/api"] },
+  { "site": "share.dliu.com", "repo": "dliu-com/file-sharing", "pages": ["https://share.dliu.com/"], "docs": ["https://share.dliu.com/docs"] },
+  { "site": "traffic.dliu.com", "repo": "dliu-com/traffic-monitor", "pages": ["https://traffic.dliu.com/"], "docs": ["https://traffic.dliu.com/about"] },
+  { "site": "plan.dliu.com", "repo": "dliu-com/travel-plan", "pages": ["https://plan.dliu.com/"], "docs": ["https://plan.dliu.com/docs/api"] },
+  { "site": "auth.dliu.com", "repo": "dliu-com/authenticate", "pages": ["https://auth.dliu.com/"], "docs": ["https://auth.dliu.com/docs"] },
+  { "site": "jh.dliu.com", "repo": "dliu-com/hujia", "pages": ["https://jh.dliu.com/"] },
+  { "site": "weiqi.dliu.com", "repo": "dliu-com/weiqi", "pages": ["https://weiqi.dliu.com/"], "header": "script" },
+  { "site": "xiangqi.dliu.com", "repo": "xiangqi", "pages": ["https://xiangqi.dliu.com/"] },
+  { "site": "link.dliu.com", "repo": "link-router", "pages": ["https://link.dliu.com/"] }
+]

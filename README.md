@@ -9,7 +9,8 @@ building or updating a dliu.com app, point the developer or AI agent to that URL
 | File | Public URL |
 | --- | --- |
 | `public/README.md` | https://files.dliu.com/dliu.com/README.md (instructions for apps) |
-| `public/ui/v1/dl.css` | https://files.dliu.com/dliu.com/ui/v1/dl.css |
+| `public/ui/v1/dl.css` | https://files.dliu.com/dliu.com/ui/v1/dl.css (every page) |
+| `public/ui/v1/dl-docs.css` | https://files.dliu.com/dliu.com/ui/v1/dl-docs.css (Docs / About pages, after dl.css) |
 | `public/ui/v1/demo.html` | https://files.dliu.com/dliu.com/ui/v1/demo.html (every component on one page) |
 | `public/favicon.png` | https://files.dliu.com/dliu.com/favicon.png (the DL icon, 512 × 512) |
 
@@ -35,6 +36,16 @@ make publish   # uploads only those files
 ```
 
 `FILES_API_URL` can be set instead of reading the stack output. The script never prints the token or the presigned URLs.
+
+## Checking the sites
+
+`sites.json` lists every dliu.com site and the pages to check. `make audit` fetches them live and reports any page that
+does not load `dl.css` (and `dl-docs.css` on docs pages), uses another favicon, lacks the shared header, or whose CSP
+blocks the shared files. Each app repo also has its own test for this.
+
+```sh
+make audit
+```
 
 ## Sites using it
 

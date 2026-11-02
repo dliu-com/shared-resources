@@ -7,7 +7,8 @@ new look; load the shared files below and build the app's own pages with them.
 | What | URL |
 | --- | --- |
 | This guide | https://files.dliu.com/dliu.com/README.md |
-| Shared stylesheet | https://files.dliu.com/dliu.com/ui/v1/dl.css |
+| Shared stylesheet (every page) | https://files.dliu.com/dliu.com/ui/v1/dl.css |
+| Docs stylesheet (Docs / About / How it works pages, after dl.css) | https://files.dliu.com/dliu.com/ui/v1/dl-docs.css |
 | Every component on one page (open it to see the look) | https://files.dliu.com/dliu.com/ui/v1/demo.html |
 | DL icon (512 × 512 PNG): header logo and favicon | https://files.dliu.com/dliu.com/favicon.png |
 | Source (edit here, then publish) | https://github.com/dliu-com/shared-resources |
@@ -21,11 +22,15 @@ new look; load the shared files below and build the app's own pages with them.
    `border: 1px solid var(--dl-line)`, `color: var(--dl-muted)`). Do not define other colour values for things the
    variables already cover.
 4. Use the markup below for the header and footer exactly, on every page of the app.
-5. The theme is light only.
+5. The theme is light only (no dark mode).
 6. No JavaScript is shared. The app's own script may fill the header's `<nav>` (for example Sign in vs Sign out), but
    it must use the same classes.
-7. Need something the kit lacks that other apps would also use (a new kind of button, a tabs bar…)? Add it to
-   `dl.css` in the source repo and publish, rather than styling it in one app only.
+7. Need something the kit lacks that other apps would also use? Add it to `dl.css` in the source repo and publish,
+   rather than styling it in one app only.
+8. The app's own content keeps its own design where it is the point of the app (a Go or chess board, a video player,
+   a birthday card); everything around it (header, buttons, fields, tabs, tables, footer, colours, fonts) is shared.
+9. Every app repo has a test that fails if a page stops loading `dl.css`, uses another favicon, or drops the shared
+   header (see video's `test/shared-ui.test.js`), and `make audit` in the source repo checks the live sites.
 
 ## Page skeleton
 
@@ -65,6 +70,35 @@ new look; load the shared files below and build the app's own pages with them.
   `Sign in` (`dl-button dl-signin`) or `Sign out` (`dl-button`). Mark the current page with `aria-current="page"`.
 - Use `<main class="dl-main dl-narrow">` for reading and form pages (760 px wide), plain `dl-main` (1280 px) for
   grids, dashboards and tables.
+- Apps in Chinese and English put the language switcher (below) last in the `dl-nav`.
+- If the app's script draws the header, it must produce exactly this markup.
+
+## Docs, About and How it works pages
+
+Load `dl-docs.css` after `dl.css`, and use the shared tabs between the sections:
+
+```html
+<link rel="stylesheet" href="https://files.dliu.com/dliu.com/ui/v1/dl.css">
+<link rel="stylesheet" href="https://files.dliu.com/dliu.com/ui/v1/dl-docs.css">
+…
+<main class="dl-main dl-docs-main">
+  <nav class="dl-tabs" aria-label="Docs sections">
+    <a href="/docs#architecture" aria-current="page">Technical architecture</a>
+    <a href="/docs#cost">Cost</a>
+    <a href="/docs#security">Security</a>
+    <a href="/docs/api">API</a>
+  </nav>
+  <article class="dl-docs">
+    <h2>How it works</h2>
+    <p class="lead">…</p>
+  </article>
+</main>
+```
+
+`dl-docs` styles the article: headings, `.lead`, lists, `code`, `pre.code`, tables in `.table-wrap`, `.source`. The `dg-*`
+classes are the diagram kit (`dg-stats`/`dg-stat`, `dg-flow`/`dg-step`/`dg-arrow`, `dg-tier`/`dg-node`, `dg-callout`,
+`dg-more`, `dg-icon` with `--dg` set to its colour, and the `dg-untrusted`, `dg-edge`, `dg-private`, `dg-app`,
+`dg-good`, `dg-warn`, `dg-bad` variants); the app's diagram script builds them.
 
 ## Components
 
@@ -83,7 +117,12 @@ new look; load the shared files below and build the app's own pages with them.
 | `dl-account` | The signed-in account name, next to Sign out |
 | `dl-main`, `dl-narrow` | Page content width |
 | `dl-footer` | Footer: `dliu.com` link first, then the app's own links, separated by ` · ` |
+| `dl-tabs` | Tabs: links or buttons; `aria-current="page"` or `aria-selected="true"` marks the open tab |
+| `dl-language`, `dl-language-toggle`, `dl-languages` | Chinese/English switcher (markup below) |
 | `dl-panel` | Grey box for a group of settings or a form section |
+| `dl-card` | White bordered box for dashboard figures, charts and lists |
+| `dl-table-wrap`, `dl-table`, `dl-num` | Tables (scroll sideways on phones); `dl-num` right-aligns numbers |
+| `dl-notice` (+ `dl-error`) | Green (or red) message box at the top of a page or form |
 | `dl-muted`, `dl-error`, `dl-success` | Secondary, error and success text |
 | `dl-visually-hidden` | Text for screen readers only |
 | `dl-icon` | A 16 px stroke SVG icon inside a `dl-button` |
@@ -99,6 +138,20 @@ Microsoft sign-in button, following
   <svg viewBox="0 0 21 21" aria-hidden="true"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
   <span>Sign in with Microsoft</span>
 </a>
+```
+
+Language switcher, last in the header's `dl-nav`. The app's script sets `aria-pressed` on the two language buttons,
+and on narrow screens (≤ 600 px, where only the 文/A button shows) toggles the `is-open` class on `.dl-languages` and
+`aria-expanded` on the toggle:
+
+```html
+<div class="dl-language">
+  <button type="button" class="dl-button dl-language-toggle" aria-controls="dl-languages" aria-expanded="false" aria-label="Language / 语言">文/A</button>
+  <div id="dl-languages" class="dl-languages" role="group" aria-label="Language / 语言">
+    <button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button>
+    <button type="button" data-language="en" lang="en" aria-pressed="false">English</button>
+  </div>
+</div>
 ```
 
 ## CSS variables
@@ -138,10 +191,13 @@ img-src   'self' https://files.dliu.com/dliu.com/
 
 ## Checklist for a new or updated app
 
-- [ ] Every page loads `dl.css` before the app's stylesheet and uses the DL icon as its favicon.
+- [ ] Every page loads `dl.css` before the app's stylesheet and uses the DL icon as its favicon; Docs/About pages also
+      load `dl-docs.css` and use `dl-tabs`.
 - [ ] Every page has the shared header and footer; the app's own CSS defines no header, button or footer styles.
 - [ ] The app's CSS uses `--dl-*` variables, not its own palette.
 - [ ] The CSP allows the two paths above.
+- [ ] The repo has a test that keeps the pages on the shared look.
+- [ ] The app is listed in `sites.json` in the source repo, and `make audit` passes for it.
 - [ ] Checked on a phone-sized screen (≤ 400 px): the header wraps cleanly and buttons are at least 44 px tall on touch screens.
 
 ## Versions
