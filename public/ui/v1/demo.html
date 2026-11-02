@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Shared UI v1 · dliu.com</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="https://files.dliu.com/dliu.com/favicon.png">
+  <link rel="stylesheet" href="https://files.dliu.com/dliu.com/ui/v1/dl.css">
+</head>
+<body class="dl-page">
+  <header class="dl-header">
+    <a class="dl-logo" href="https://dliu.com" aria-label="dliu.com"><img src="https://files.dliu.com/dliu.com/favicon.png" alt="DL" width="32" height="32"></a>
+    <a class="dl-brand" href="#">Shared UI</a>
+    <nav class="dl-nav" aria-label="Site">
+      <a class="dl-nav-link" href="#" aria-current="page">Components</a>
+      <a class="dl-nav-link" href="#buttons">Buttons</a>
+      <a class="dl-button" href="#">Docs</a>
+      <a class="dl-button dl-signin" href="#">Sign in</a>
+    </nav>
+  </header>
+
+  <main class="dl-main dl-narrow">
+    <h1>dliu.com shared UI, v1</h1>
+    <p class="dl-muted">Every dliu.com site loads <code>https://files.dliu.com/dliu.com/ui/v1/dl.css</code> before its own stylesheet. The header above is the shared menu bar: the DL icon links to dliu.com and the site name links to the site’s home page.</p>
+
+    <h2 id="buttons">Buttons</h2>
+    <p>
+      <button class="dl-button" type="button">Button</button>
+      <button class="dl-button dl-button-primary" type="button">Primary</button>
+      <button class="dl-button dl-button-danger" type="button">Delete</button>
+      <button class="dl-button dl-button-small" type="button">Small</button>
+      <button class="dl-button" type="button" disabled>Disabled</button>
+      <button class="dl-button dl-button-link" type="button">Link button</button>
+    </p>
+
+    <h2>Sign-in</h2>
+    <p><a class="dl-button dl-signin" href="#">Sign in</a> <span class="dl-account">user@example.com · <a href="#">Sign out</a></span></p>
+    <p>
+      <a class="dl-ms-signin" href="#">
+        <svg viewBox="0 0 21 21" aria-hidden="true"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
+        <span>Sign in with Microsoft</span>
+      </a>
+    </p>
+
+    <h2>Header with an owner signed in</h2>
+    <header class="dl-header">
+      <a class="dl-logo" href="https://dliu.com" aria-label="dliu.com"><img src="https://files.dliu.com/dliu.com/favicon.png" alt="DL" width="32" height="32"></a>
+      <a class="dl-brand" href="#">Video</a>
+      <nav class="dl-nav" aria-label="Example">
+        <a class="dl-button" href="#">Docs</a>
+        <a class="dl-button dl-button-primary" href="#">＋ Upload</a>
+        <a class="dl-button" href="#">Sign out</a>
+      </nav>
+    </header>
+
+    <h2>Panel and form fields</h2>
+    <div class="dl-panel">
+      <p><label for="demo-title">Title</label><br><input id="demo-title" type="text" value="A title"></p>
+      <p><label for="demo-text">Description</label><br><textarea id="demo-text" rows="3">Some text</textarea></p>
+      <p><select aria-label="Choice"><option>Option</option></select></p>
+      <p class="dl-success">Saved.</p>
+      <p class="dl-error">Something went wrong.</p>
+    </div>
+  </main>
+
+  <footer class="dl-footer"><a href="https://dliu.com">dliu.com</a> · <a href="https://github.com/dliu-com/shared-resources">Source</a></footer>
+</body>
+</html>

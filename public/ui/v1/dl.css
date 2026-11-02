@@ -1,0 +1,155 @@
+/*
+ * dliu.com shared UI, v1: https://files.dliu.com/dliu.com/ui/v1/dl.css
+ * Source: https://github.com/dliu-com/shared-resources (public/ui/v1/dl.css)
+ *
+ * One look for every dliu.com site: colours, header (menu bar) with the DL icon, buttons,
+ * sign-in buttons, page layout and footer. Load it before the site's own stylesheet.
+ * Classes start with dl- so they never clash with a site's own names. Element defaults use
+ * :where() (no specificity), so any site rule overrides them.
+ * v1 only gains things; a change that would break a page goes to v2.
+ */
+
+:root {
+  color-scheme: light;
+  --dl-bg: #ffffff;
+  --dl-panel: #f6f7f9;
+  --dl-surface: #ffffff;
+  --dl-line: #dfe3e8;
+  --dl-line-strong: #b8c0ca;
+  --dl-text: #1c2024;
+  --dl-muted: #646b75;
+  --dl-accent: #2563eb;
+  --dl-accent-hover: #1d4ed8;
+  --dl-accent-soft: #eef3fe;
+  --dl-focus: rgba(37, 99, 235, 0.35);
+  --dl-danger: #d1242f;
+  --dl-ok: #1a7f37;
+  --dl-radius: 12px;
+  --dl-radius-small: 8px;
+  --dl-font: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --dl-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --dl-main-width: 1280px;
+  --dl-gutter: 24px;
+}
+@media (max-width: 640px) {
+  :root { --dl-gutter: 16px; }
+}
+
+/* ---------- Base (no specificity: site rules win) ---------- */
+:where(*, *::before, *::after) { box-sizing: border-box; }
+:where(html) { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; font-family: var(--dl-font); }
+:where(body) { margin: 0; background: var(--dl-bg); color: var(--dl-text); font-family: var(--dl-font); }
+:where(img, video) { max-width: 100%; }
+:where(a) { color: var(--dl-accent); text-decoration: none; }
+:where(a:hover) { text-decoration: underline; }
+:where(h1) { font-size: 24px; margin: 0 0 16px; }
+:where(h2) { font-size: 18px; margin: 24px 0 12px; }
+:where(input:not([type]), input[type=text], input[type=search], input[type=email], input[type=url], input[type=number], input[type=password], input[type=tel], textarea, select) {
+  font: inherit; padding: 9px 11px; border-radius: var(--dl-radius-small); border: 1px solid var(--dl-line);
+  background: var(--dl-surface); color: var(--dl-text);
+}
+:where(input:not([type]), input[type=text], input[type=search], input[type=email], input[type=url], input[type=number], input[type=password], input[type=tel], textarea) { width: 100%; }
+:where(input, textarea, select):focus { outline: 2px solid var(--dl-focus); border-color: var(--dl-accent); }
+:where(a, button, summary):focus-visible { outline: 2px solid var(--dl-accent); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+/* ---------- Page layout ---------- */
+/* <body class="dl-page">: header on top, main fills the screen, footer at the bottom. */
+.dl-page { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+.dl-main {
+  width: 100%; max-width: var(--dl-main-width); margin: 0 auto; flex: 1 0 auto;
+  padding: var(--dl-gutter) max(var(--dl-gutter), env(safe-area-inset-right)) var(--dl-gutter) max(var(--dl-gutter), env(safe-area-inset-left));
+}
+.dl-main.dl-narrow { max-width: 760px; }
+@media (min-width: 1600px) {
+  .dl-main:not(.dl-narrow) { max-width: max(var(--dl-main-width), 1520px); }
+}
+
+/* ---------- Header (menu bar) ----------
+   <header class="dl-header">
+     <a class="dl-logo" href="https://dliu.com" aria-label="dliu.com"><img src="https://files.dliu.com/dliu.com/favicon.png" alt="DL" width="32" height="32"></a>
+     <a class="dl-brand" href="/">Site name</a>
+     <nav class="dl-nav" aria-label="Site"> dl-nav-link links and dl-button buttons </nav>
+   </header> */
+.dl-header {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; min-height: 60px;
+  padding: max(10px, env(safe-area-inset-top)) max(var(--dl-gutter), env(safe-area-inset-right)) 10px max(var(--dl-gutter), env(safe-area-inset-left));
+  background: rgba(255, 255, 255, 0.92); border-bottom: 1px solid var(--dl-line);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  font-family: var(--dl-font);
+}
+.dl-logo { display: flex; flex: none; border-radius: 7px; }
+.dl-logo img { display: block; width: 32px; height: 32px; }
+.dl-brand { flex: none; font: 650 18px/1.2 var(--dl-font); color: var(--dl-text); white-space: nowrap; text-decoration: none; }
+.dl-brand:hover { color: var(--dl-text); text-decoration: none; }
+.dl-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px; margin-left: auto; }
+/* Plain text links in the menu bar. */
+.dl-nav-link { padding: 8px 6px; color: var(--dl-muted); font-size: 14px; font-weight: 500; white-space: nowrap; text-decoration: none; }
+.dl-nav-link:hover { color: var(--dl-text); text-decoration: none; }
+.dl-nav-link[aria-current] { color: var(--dl-text); font-weight: 600; box-shadow: inset 0 -2px 0 var(--dl-accent); }
+.dl-account { color: var(--dl-muted); font-size: 13px; overflow-wrap: anywhere; }
+
+/* ---------- Buttons ----------
+   <a class="dl-button" href="…">, <button class="dl-button dl-button-primary">,
+   plus dl-button-danger, dl-button-small and dl-button-link (looks like a link). */
+.dl-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 14px; border: 1px solid var(--dl-line); border-radius: var(--dl-radius-small);
+  background: var(--dl-surface); color: var(--dl-text); font: inherit; font-size: 14px; line-height: 1.2;
+  white-space: nowrap; text-decoration: none; cursor: pointer;
+}
+.dl-button:hover { border-color: var(--dl-line-strong); background: var(--dl-panel); color: var(--dl-text); text-decoration: none; }
+.dl-button[aria-current] { border-color: var(--dl-accent); color: var(--dl-accent); }
+.dl-button.dl-button-primary { border-color: var(--dl-accent); background: var(--dl-accent); color: #fff; }
+.dl-button.dl-button-primary:hover { border-color: var(--dl-accent-hover); background: var(--dl-accent-hover); color: #fff; }
+.dl-button.dl-button-danger { color: var(--dl-danger); }
+.dl-button.dl-button-small { padding: 5px 10px; font-size: 13px; }
+.dl-button.dl-button-link { padding: 0; border: 0; background: none; color: var(--dl-accent); }
+.dl-button.dl-button-link:hover { background: none; color: var(--dl-accent); text-decoration: underline; }
+.dl-button:disabled, .dl-button[aria-disabled="true"] { opacity: 0.55; cursor: default; pointer-events: none; }
+.dl-button .dl-icon { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- Sign-in ----------
+   Header sign-in: <a class="dl-button dl-signin" href="/auth/login">Sign in</a>
+   Full button, following Microsoft identity platform branding:
+   <a class="dl-ms-signin" href="/auth/login"><svg viewBox="0 0 21 21" aria-hidden="true">four squares</svg><span>Sign in with Microsoft</span></a> */
+.dl-button.dl-signin {
+  padding: 9px 18px; border-color: var(--dl-accent); background: var(--dl-accent); color: #fff; font-weight: 600;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.35);
+}
+.dl-button.dl-signin:hover { border-color: var(--dl-accent-hover); background: var(--dl-accent-hover); color: #fff; }
+.dl-ms-signin {
+  display: inline-flex; align-items: center; gap: 12px; height: 41px; padding: 0 12px;
+  border: 1px solid #8c8c8c; background: #fff; color: #5e5e5e;
+  font: 600 15px "Segoe UI", system-ui, sans-serif; text-decoration: none; cursor: pointer;
+}
+.dl-ms-signin svg { flex: none; width: 21px; height: 21px; }
+.dl-ms-signin:hover { background: #f3f3f3; color: #5e5e5e; text-decoration: none; }
+
+/* ---------- Footer ---------- */
+.dl-footer {
+  padding: 24px var(--dl-gutter) max(24px, env(safe-area-inset-bottom));
+  color: var(--dl-muted); font-size: 13px; text-align: center;
+}
+.dl-footer a { color: var(--dl-muted); }
+
+/* ---------- Content helpers ---------- */
+.dl-panel { padding: 18px; border: 1px solid var(--dl-line); border-radius: var(--dl-radius); background: var(--dl-panel); }
+.dl-muted { color: var(--dl-muted); }
+.dl-error { color: var(--dl-danger); }
+.dl-success { color: var(--dl-ok); }
+.dl-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Phones and touch screens ---------- */
+@media (max-width: 400px) {
+  .dl-header { gap: 8px; }
+  .dl-nav { gap: 6px; }
+  .dl-nav .dl-button { padding: 8px 10px; }
+}
+/* Bigger targets, and 16px text so iOS doesn't zoom into fields. */
+@media (pointer: coarse) {
+  .dl-button:not(.dl-button-link) { min-height: 44px; }
+  .dl-nav-link { display: inline-flex; align-items: center; min-height: 44px; }
+  :where(input:not([type]), input[type=text], input[type=search], input[type=email], input[type=url], input[type=number], input[type=password], input[type=tel], textarea, select) { font-size: 16px; }
+}
