@@ -40,3 +40,4 @@ make publish   # uploads only those files
 
 | Site | Since |
 | --- | --- |
+| [video.dliu.com](https://video.dliu.com) ([dliu-com/video](https://github.com/dliu-com/video)) | v1, 2 Nov 2026 (pilot) |
