@@ -179,7 +179,8 @@ outside). A language switcher inside the nav shows both languages when the menu 
 <nav id="dl-menu" class="dl-nav dl-nav-collapsible" aria-label="Site">…</nav>
 ```
 
-Dialog (a native `<dialog>`; the app's script calls `showModal()` and `close()`):
+Dialog (a native `<dialog>`; the app's script calls `showModal()` and `close()`; a `<form method="dialog">` may wrap
+the head, body and actions):
 
 ```html
 <dialog class="dl-dialog" aria-labelledby="rules-title">

@@ -192,6 +192,8 @@ a.dl-logo img, img.dl-logo { display: block; flex: none; width: 32px; height: 32
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); font-family: var(--dl-font);
 }
 .dl-dialog[open] { display: flex; flex-direction: column; }
+/* A <form method="dialog"> may wrap the head, body and actions. */
+.dl-dialog[open] > form { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; margin: 0; }
 .dl-dialog::backdrop { background: rgba(15, 23, 42, 0.45); }
 .dl-dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--dl-line); }
 .dl-dialog-head h2 { margin: 0; font-size: 18px; }
