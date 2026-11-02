@@ -62,6 +62,18 @@
       </nav>
     </header>
 
+    <h2>Toggle, segmented choice and dialog</h2>
+    <p>
+      <button class="dl-button" type="button" aria-pressed="true">Sound on</button>
+      <span class="dl-segmented" role="group" aria-label="Side"><button type="button" aria-pressed="true">红方</button><button type="button" aria-pressed="false">黑方</button></span>
+      <span class="dl-segmented" role="group" aria-label="Device"><button type="button" aria-pressed="false">同一设备</button><button type="button" aria-pressed="true">不同设备</button></span>
+    </p>
+    <div class="dl-dialog" role="dialog" aria-labelledby="demo-dialog-title">
+      <div class="dl-dialog-head"><h2 id="demo-dialog-title">Start a new game?</h2><button type="button" class="dl-dialog-close" aria-label="Close">✕</button></div>
+      <div class="dl-dialog-body">A real dialog is a native &lt;dialog class="dl-dialog"&gt; opened with showModal(), over a dimmed page.</div>
+      <div class="dl-dialog-actions"><button class="dl-button" type="button">Cancel</button><button class="dl-button dl-button-primary" type="button">New game</button></div>
+    </div>
+
     <h2>Tabs</h2>
     <nav class="dl-tabs" aria-label="Example tabs"><a href="#" aria-current="page">Technical architecture</a><a href="#">Cost</a><a href="#">Security</a><a href="#">API</a></nav>
 

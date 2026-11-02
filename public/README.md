@@ -119,6 +119,9 @@ classes are the diagram kit (`dg-stats`/`dg-stat`, `dg-flow`/`dg-step`/`dg-arrow
 | `dl-footer` | Footer: `dliu.com` link first, then the app's own links, separated by ` · ` |
 | `dl-tabs` | Tabs: links or buttons; `aria-current="page"` or `aria-selected="true"` marks the open tab |
 | `dl-language`, `dl-language-toggle`, `dl-languages` | Chinese/English switcher (markup below) |
+| `dl-button` with `aria-pressed="true"` | A toggle button that is on |
+| `dl-segmented` | One choice out of a few (buttons inside; `aria-pressed`, `aria-checked` or `aria-selected="true"` marks the chosen one) |
+| `dl-dialog`, `dl-dialog-head`, `dl-dialog-close`, `dl-dialog-body`, `dl-dialog-actions` | Native `<dialog>` opened with `showModal()` (markup below) |
 | `dl-panel` | Grey box for a group of settings or a form section |
 | `dl-card` | White bordered box for dashboard figures, charts and lists |
 | `dl-table-wrap`, `dl-table`, `dl-num` | Tables (scroll sideways on phones); `dl-num` right-aligns numbers |
@@ -152,6 +155,22 @@ and on narrow screens (≤ 600 px, where only the 文/A button shows) toggles th
     <button type="button" data-language="en" lang="en" aria-pressed="false">English</button>
   </div>
 </div>
+```
+
+Dialog (a native `<dialog>`; the app's script calls `showModal()` and `close()`):
+
+```html
+<dialog class="dl-dialog" aria-labelledby="rules-title">
+  <div class="dl-dialog-head">
+    <h2 id="rules-title">Title</h2>
+    <button type="button" class="dl-dialog-close" aria-label="Close">✕</button>
+  </div>
+  <div class="dl-dialog-body">…</div>
+  <div class="dl-dialog-actions">
+    <button type="button" class="dl-button">Cancel</button>
+    <button type="button" class="dl-button dl-button-primary">OK</button>
+  </div>
+</dialog>
 ```
 
 ## CSS variables

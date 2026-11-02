@@ -105,6 +105,8 @@
 .dl-button.dl-button-link { padding: 0; border: 0; background: none; color: var(--dl-accent); }
 .dl-button.dl-button-link:hover { background: none; color: var(--dl-accent); text-decoration: underline; }
 .dl-button:disabled, .dl-button[aria-disabled="true"] { opacity: 0.55; cursor: default; pointer-events: none; }
+/* A toggle button that is on: <button class="dl-button" aria-pressed="true"> */
+.dl-button[aria-pressed="true"] { border-color: var(--dl-accent); background: var(--dl-accent-soft); color: var(--dl-accent); font-weight: 600; }
 .dl-button .dl-icon { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---------- Sign-in ----------
@@ -123,6 +125,46 @@
 }
 .dl-ms-signin svg { flex: none; width: 21px; height: 21px; }
 .dl-ms-signin:hover { background: #f3f3f3; color: #5e5e5e; text-decoration: none; }
+
+/* ---------- Segmented choice ----------
+   One choice out of a few: <div class="dl-segmented" role="group" aria-label="Side">
+     <button type="button" aria-pressed="true">红方</button><button type="button" aria-pressed="false">黑方</button></div>
+   aria-pressed, aria-checked or aria-selected="true" marks the chosen one. */
+.dl-segmented { display: inline-flex; border: 1px solid var(--dl-line); border-radius: var(--dl-radius-small); overflow: hidden; background: var(--dl-surface); }
+.dl-segmented > button, .dl-segmented > a {
+  padding: 8px 14px; border: 0; border-left: 1px solid var(--dl-line); background: none;
+  color: var(--dl-text); font: 500 14px/1.2 var(--dl-font); text-decoration: none; cursor: pointer;
+}
+.dl-segmented > :first-child { border-left: 0; }
+.dl-segmented > button:hover, .dl-segmented > a:hover { background: var(--dl-panel); text-decoration: none; }
+.dl-segmented > [aria-pressed="true"], .dl-segmented > [aria-checked="true"], .dl-segmented > [aria-selected="true"] {
+  background: var(--dl-accent-soft); color: var(--dl-accent); font-weight: 600;
+}
+.dl-segmented > :disabled { opacity: 0.55; cursor: default; }
+
+/* ---------- Dialogs (native <dialog>, opened with showModal()) ----------
+   <dialog class="dl-dialog" aria-labelledby="rules-title">
+     <div class="dl-dialog-head"><h2 id="rules-title">Title</h2>
+       <button type="button" class="dl-dialog-close" aria-label="Close">✕</button></div>
+     <div class="dl-dialog-body">…</div>
+     <div class="dl-dialog-actions"><button class="dl-button">Cancel</button><button class="dl-button dl-button-primary">OK</button></div>
+   </dialog> */
+.dl-dialog {
+  width: min(560px, calc(100vw - 24px)); max-height: calc(100dvh - 48px); padding: 0;
+  border: 1px solid var(--dl-line); border-radius: var(--dl-radius); background: var(--dl-surface); color: var(--dl-text);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); font-family: var(--dl-font);
+}
+.dl-dialog[open] { display: flex; flex-direction: column; }
+.dl-dialog::backdrop { background: rgba(15, 23, 42, 0.45); }
+.dl-dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--dl-line); }
+.dl-dialog-head h2 { margin: 0; font-size: 18px; }
+.dl-dialog-close {
+  flex: none; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0;
+  border: 0; border-radius: var(--dl-radius-small); background: none; color: var(--dl-muted); font-size: 18px; cursor: pointer;
+}
+.dl-dialog-close:hover { background: var(--dl-panel); color: var(--dl-text); }
+.dl-dialog-body { padding: 16px 18px; overflow: auto; line-height: 1.55; }
+.dl-dialog-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--dl-line); background: var(--dl-panel); }
 
 /* ---------- Footer ---------- */
 .dl-footer {
@@ -206,6 +248,8 @@
 @media (pointer: coarse) {
   .dl-button:not(.dl-button-link) { min-height: 44px; }
   .dl-languages > button { min-height: 44px; }
+  .dl-segmented > button, .dl-segmented > a { min-height: 44px; }
+  .dl-dialog-close { width: 44px; height: 44px; }
   .dl-nav-link { display: inline-flex; align-items: center; min-height: 44px; }
   :where(input:not([type]), input[type=text], input[type=search], input[type=email], input[type=url], input[type=number], input[type=password], input[type=tel], textarea, select) { font-size: 16px; }
 }
