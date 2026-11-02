@@ -61,9 +61,6 @@
   padding: var(--dl-gutter) max(var(--dl-gutter), env(safe-area-inset-right)) var(--dl-gutter) max(var(--dl-gutter), env(safe-area-inset-left));
 }
 .dl-main.dl-narrow { max-width: 760px; }
-@media (min-width: 1600px) {
-  .dl-main:not(.dl-narrow) { max-width: max(var(--dl-main-width), 1520px); }
-}
 
 /* ---------- Header (menu bar) ----------
    <header class="dl-header">
