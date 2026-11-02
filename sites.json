@@ -11,5 +11,5 @@
   { "site": "jh.dliu.com", "repo": "dliu-com/hujia", "pages": ["https://jh.dliu.com/"] },
   { "site": "weiqi.dliu.com", "repo": "dliu-com/weiqi", "pages": ["https://weiqi.dliu.com/"], "header": "script" },
   { "site": "xiangqi.dliu.com", "repo": "xiangqi", "pages": ["https://xiangqi.dliu.com/"] },
-  { "site": "link.dliu.com", "repo": "link-router", "pages": ["https://link.dliu.com/"] }
+  { "site": "link.dliu.com", "repo": "link-router", "pages": [], "skip": "redirects only (CloudFront Function), no HTML pages" }
 ]

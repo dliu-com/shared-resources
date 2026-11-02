@@ -63,6 +63,7 @@ async function checkPage(site, url, isDocs) {
 
 let failed = 0;
 for (const site of sites.filter((s) => !only.length || only.includes(s.site))) {
+  if (site.skip) { console.log(`– ${site.site}  (skipped: ${site.skip})`); continue; }
   const pages = [...site.pages.map((url) => [url, false]), ...(site.docs || []).map((url) => [url, true])];
   for (const [url, isDocs] of pages) {
     let failures;
