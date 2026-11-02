@@ -21,7 +21,7 @@ new look; load the shared files below and build the app's own pages with them.
    tables, editors…), never its own header, buttons, sign-in button, footer or colour palette.
 3. Use the `--dl-*` CSS variables for every colour, radius and font in the app's CSS (for example
    `border: 1px solid var(--dl-line)`, `color: var(--dl-muted)`). Do not define other colour values for things the
-   variables already cover.
+   variables already cover, and never hard-code the accent (`#209cee`, or the older `#2563eb`).
 4. Use the markup below for the header and footer exactly, on every page of the app.
 5. The theme is light only (no dark mode).
 6. No JavaScript is shared. The app's own script may fill the header's `<nav>` (for example Sign in vs Sign out), but
@@ -68,7 +68,8 @@ new look; load the shared files below and build the app's own pages with them.
 ```
 
 - Top left is the app's **own logo** and name, one link to the app's home page (`/`). The favicon is the same logo.
-  An app without a logo of its own uses the DL logo there.
+  App logos follow the DL logo's style: white artwork on a `#209cee` square with rounded corners (`rx="8"` on a
+  32 × 32 viewBox), as an SVG. Personal sites (dliu.com, home.dliu.com, jh.dliu.com, cyy.dliu.com) keep their own.
 - Every footer starts with the shared **DL logo** (`dl-footer-logo`) linking to `https://dliu.com`, then the
   `dliu.com` link and the app's own links, separated by ` · `.
 - Apps with more links than fit on a phone use the collapsible menu (below).
@@ -122,6 +123,7 @@ Read-more cards linking to other docs pages: `dl-docs-cards` holding `a.dl-docs-
 | `dl-button dl-button-primary` | The main action on a page or form (one per area) |
 | `dl-button dl-button-danger` | Delete and other destructive actions |
 | `dl-button dl-button-small` | Compact buttons in lists and tables |
+| `dl-button dl-button-quiet` | Borderless until hovered: toolbars and icon buttons |
 | `dl-button dl-button-link` | A button that looks like a link |
 | `dl-button dl-signin` | The Sign in button in the header |
 | `dl-ms-signin` | Large "Sign in with Microsoft" button for a sign-in page or a private page's landing card (markup below) |
@@ -131,7 +133,7 @@ Read-more cards linking to other docs pages: `dl-docs-cards` holding `a.dl-docs-
 | `dl-tabs` | Tabs: links or buttons; `aria-current="page"` or `aria-selected="true"` marks the open tab |
 | `dl-language`, `dl-language-toggle`, `dl-languages` | Chinese/English switcher (markup below) |
 | `dl-button` with `aria-pressed="true"` | A toggle button that is on |
-| `dl-segmented` | One choice out of a few (buttons inside; `aria-pressed`, `aria-checked` or `aria-selected="true"` marks the chosen one) |
+| `dl-segmented` (+ `dl-segmented-small`) | One choice out of a few (buttons inside; `aria-pressed`, `aria-checked` or `aria-selected="true"` marks the chosen one) |
 | `dl-dialog`, `dl-dialog-head`, `dl-dialog-close`, `dl-dialog-body`, `dl-dialog-actions` | Native `<dialog>` opened with `showModal()` (markup below) |
 | `dl-panel` | Grey box for a group of settings or a form section |
 | `dl-card` | White bordered box for dashboard figures, charts and lists |
@@ -204,9 +206,9 @@ Dialog (a native `<dialog>`; the app's script calls `showModal()` and `close()`)
 | `--dl-line-strong` | `#b8c0ca` | Hovered borders |
 | `--dl-text` | `#1c2024` | Text |
 | `--dl-muted` | `#646b75` | Secondary text |
-| `--dl-accent` | `#2563eb` | Links, primary buttons, selection |
-| `--dl-accent-hover` | `#1d4ed8` | Hovered primary buttons |
-| `--dl-accent-soft` | `#eef3fe` | Light accent background (selected rows, badges) |
+| `--dl-accent` | `#209cee` (the DL logo's blue) | Links, primary buttons, selection, app logos |
+| `--dl-accent-hover` | `#1786d1` | Hovered primary buttons |
+| `--dl-accent-soft` | `#e8f5fd` | Light accent background (selected rows, badges) |
 | `--dl-focus` | blue at 35 % | Focus ring of fields |
 | `--dl-danger` | `#d1242f` | Errors and destructive actions |
 | `--dl-ok` | `#1a7f37` | Success |

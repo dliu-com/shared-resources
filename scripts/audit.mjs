@@ -5,6 +5,7 @@
 //   - has the shared header (dl-header with the app's dl-logo and dl-brand) in its HTML,
 //     unless the site sets "header": "script" (header drawn by the page's script)
 //   - has the DL logo in the footer (dl-footer-logo), unless the site sets "footer": "script"
+//   - its own stylesheets and inline styles don't hard-code the old accent blue (#2563eb family)
 //   - its Content-Security-Policy, if any, allows the shared stylesheet folder and the DL icon
 //
 //   node scripts/audit.mjs [site …]     exit code 1 when any check fails
@@ -60,6 +61,11 @@ async function checkPage(site, url, isDocs) {
   if (site.footer !== 'script' && !new RegExp(`class=["']dl-footer-logo["'][^>]*>\\s*<img[^>]*src=["']${ICON.replace(/[.]/g, '\\.')}["']`).test(html)) {
     failures.push('no DL logo in the footer');
   }
+  const OLD_ACCENT = /#2563eb|#1d4ed8|#eef3fe|rgba?\(\s*37\s*,\s*99\s*,\s*235/i;
+  const ownSheets = styles.filter((href) => href && !href.startsWith(BASE)).map((href) => new URL(href, response.url).href);
+  const sheetTexts = await Promise.all(ownSheets.map((href) => fetch(href).then((r) => (r.ok ? r.text() : '')).catch(() => '')));
+  const inline = [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)].map((m) => m[1]);
+  if ([...sheetTexts, ...inline].some((text) => OLD_ACCENT.test(text))) failures.push('app CSS hard-codes the old accent blue (#2563eb)');
   if (!cspAllows(csp, 'style-src', CSS, response.url)) failures.push('CSP blocks dl.css');
   if (!cspAllows(csp, 'img-src', ICON, response.url)) failures.push('CSP blocks the DL icon');
   return failures;

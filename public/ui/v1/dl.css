@@ -18,10 +18,11 @@
   --dl-line-strong: #b8c0ca;
   --dl-text: #1c2024;
   --dl-muted: #646b75;
-  --dl-accent: #2563eb;
-  --dl-accent-hover: #1d4ed8;
-  --dl-accent-soft: #eef3fe;
-  --dl-focus: rgba(37, 99, 235, 0.35);
+  /* The DL logo's blue, exactly. */
+  --dl-accent: #209cee;
+  --dl-accent-hover: #1786d1;
+  --dl-accent-soft: #e8f5fd;
+  --dl-focus: rgba(32, 156, 238, 0.35);
   --dl-danger: #d1242f;
   --dl-ok: #1a7f37;
   --dl-radius: 12px;
@@ -120,7 +121,8 @@ a.dl-logo img, img.dl-logo { display: block; flex: none; width: 32px; height: 32
 
 /* ---------- Buttons ----------
    <a class="dl-button" href="…">, <button class="dl-button dl-button-primary">,
-   plus dl-button-danger, dl-button-small and dl-button-link (looks like a link). */
+   plus dl-button-danger, dl-button-small, dl-button-quiet (no border until hovered, for toolbars and icon
+   buttons) and dl-button-link (looks like a link). */
 .dl-button {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   padding: 8px 14px; border: 1px solid var(--dl-line); border-radius: var(--dl-radius-small);
@@ -129,12 +131,15 @@ a.dl-logo img, img.dl-logo { display: block; flex: none; width: 32px; height: 32
 }
 .dl-button:hover { border-color: var(--dl-line-strong); background: var(--dl-panel); color: var(--dl-text); text-decoration: none; }
 .dl-button[aria-current] { border-color: var(--dl-accent); color: var(--dl-accent); }
-.dl-button.dl-button-primary { border-color: var(--dl-accent); background: var(--dl-accent); color: #fff; }
+.dl-button.dl-button-primary { border-color: var(--dl-accent); background: var(--dl-accent); color: #fff; font-weight: 600; }
 .dl-button.dl-button-primary:hover { border-color: var(--dl-accent-hover); background: var(--dl-accent-hover); color: #fff; }
-.dl-button.dl-button-danger { color: var(--dl-danger); }
 .dl-button.dl-button-small { padding: 5px 10px; font-size: 13px; }
+.dl-button.dl-button-quiet { border-color: transparent; background: none; }
+.dl-button.dl-button-quiet:hover { border-color: var(--dl-line); background: var(--dl-panel); }
 .dl-button.dl-button-link { padding: 0; border: 0; background: none; color: var(--dl-accent); }
 .dl-button.dl-button-link:hover { background: none; color: var(--dl-accent); text-decoration: underline; }
+/* After dl-button-link, so a link-style Delete stays red. */
+.dl-button.dl-button-danger, .dl-button.dl-button-danger:hover { color: var(--dl-danger); }
 .dl-button:disabled, .dl-button[aria-disabled="true"] { opacity: 0.55; cursor: default; pointer-events: none; }
 /* A toggle button that is on: <button class="dl-button" aria-pressed="true"> */
 .dl-button[aria-pressed="true"] { border-color: var(--dl-accent); background: var(--dl-accent-soft); color: var(--dl-accent); font-weight: 600; }
@@ -146,7 +151,7 @@ a.dl-logo img, img.dl-logo { display: block; flex: none; width: 32px; height: 32
    <a class="dl-ms-signin" href="/auth/login"><svg viewBox="0 0 21 21" aria-hidden="true">four squares</svg><span>Sign in with Microsoft</span></a> */
 .dl-button.dl-signin {
   padding: 9px 18px; border-color: var(--dl-accent); background: var(--dl-accent); color: #fff; font-weight: 600;
-  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 1px 3px rgba(32, 156, 238, 0.35);
 }
 .dl-button.dl-signin:hover { border-color: var(--dl-accent-hover); background: var(--dl-accent-hover); color: #fff; }
 .dl-ms-signin {
@@ -172,6 +177,7 @@ a.dl-logo img, img.dl-logo { display: block; flex: none; width: 32px; height: 32
   background: var(--dl-accent-soft); color: var(--dl-accent); font-weight: 600;
 }
 .dl-segmented > :disabled { opacity: 0.55; cursor: default; }
+.dl-segmented.dl-segmented-small > button, .dl-segmented.dl-segmented-small > a { padding: 4px 12px; font-size: 13px; }
 
 /* ---------- Dialogs (native <dialog>, opened with showModal()) ----------
    <dialog class="dl-dialog" aria-labelledby="rules-title">
