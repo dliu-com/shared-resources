@@ -61,9 +61,9 @@ All on `ui/v1` since 2 Nov 2026; `make audit` passes for every page in `sites.js
 | [plan.dliu.com](https://plan.dliu.com) | dliu-com/travel-plan | own (map pin) |
 | [auth.dliu.com](https://auth.dliu.com) | dliu-com/authenticate | own (lock) |
 | [weiqi.dliu.com](https://weiqi.dliu.com) | dliu-com/weiqi | own (Go stones) |
-| [xiangqi.dliu.com](https://xiangqi.dliu.com) | local folder `xiangqi` | own (象) |
+| [xiangqi.dliu.com](https://xiangqi.dliu.com) | dliu-com/xiangqi | own (象) |
 | [dliu.com](https://dliu.com) | dliu-com/home-site | personal: DL |
 | [home.dliu.com](https://home.dliu.com) | dliu-com/home | personal: DL |
 | [jh.dliu.com](https://jh.dliu.com) | dliu-com/hujia | personal: DL |
-| [cyy.dliu.com](https://cyy.dliu.com) | local folder `chenyiyu-master` | personal: cake |
+| [cyy.dliu.com](https://cyy.dliu.com) | dliu-com/chenyiyu (folder `chenyiyu-master`) | personal: cake |
 | link.dliu.com | local folder `link-router` | none (redirects only, no pages) |
