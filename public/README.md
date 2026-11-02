@@ -1,7 +1,8 @@
 # dliu.com shared resources
 
 Instructions for building or updating any dliu.com app (people and AI agents). Every dliu.com site must look the same:
-same header (menu bar) with the DL icon, same buttons, same sign-in button, same colours, fonts and footer. Do not invent a
+same header (menu bar), buttons, sign-in button, colours, fonts and footer. Each app keeps its own logo (top left and
+favicon); the shared DL logo sits in every footer. Do not invent a
 new look; load the shared files below and build the app's own pages with them.
 
 | What | URL |
@@ -10,7 +11,7 @@ new look; load the shared files below and build the app's own pages with them.
 | Shared stylesheet (every page) | https://files.dliu.com/dliu.com/ui/v1/dl.css |
 | Docs stylesheet (Docs / About / How it works pages, after dl.css) | https://files.dliu.com/dliu.com/ui/v1/dl-docs.css |
 | Every component on one page (open it to see the look) | https://files.dliu.com/dliu.com/ui/v1/demo.html |
-| DL icon (512 × 512 PNG): header logo and favicon | https://files.dliu.com/dliu.com/favicon.png |
+| DL logo (512 × 512 PNG): in every footer | https://files.dliu.com/dliu.com/favicon.png |
 | Source (edit here, then publish) | https://github.com/dliu-com/shared-resources |
 
 ## Rules
@@ -29,8 +30,8 @@ new look; load the shared files below and build the app's own pages with them.
    rather than styling it in one app only.
 8. The app's own content keeps its own design where it is the point of the app (a Go or chess board, a video player,
    a birthday card); everything around it (header, buttons, fields, tabs, tables, footer, colours, fonts) is shared.
-9. Every app repo has a test that fails if a page stops loading `dl.css`, uses another favicon, or drops the shared
-   header (see video's `test/shared-ui.test.js`), and `make audit` in the source repo checks the live sites.
+9. Every app repo has a test that fails if a page stops loading `dl.css`, or drops the shared header (with the app's
+   logo) or the footer's DL logo (see video's `test/shared-ui.test.js`), and `make audit` in the source repo checks the live sites.
 
 ## Page skeleton
 
@@ -41,14 +42,13 @@ new look; load the shared files below and build the app's own pages with them.
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Page · App name</title>
-  <link rel="icon" type="image/png" href="https://files.dliu.com/dliu.com/favicon.png">
+  <link rel="icon" href="/logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://files.dliu.com/dliu.com/ui/v1/dl.css">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body class="dl-page">
   <header class="dl-header">
-    <a class="dl-logo" href="https://dliu.com" aria-label="dliu.com"><img src="https://files.dliu.com/dliu.com/favicon.png" alt="DL" width="32" height="32"></a>
-    <a class="dl-brand" href="/">App name</a>
+    <a class="dl-brand" href="/"><img class="dl-logo" src="/logo.svg" alt="" width="32" height="32">App name</a>
     <nav class="dl-nav" aria-label="Site">
       <a class="dl-nav-link" href="/about">About</a>
       <a class="dl-button" href="/docs">Docs</a>
@@ -59,12 +59,19 @@ new look; load the shared files below and build the app's own pages with them.
     <h1>Page title</h1>
     …
   </main>
-  <footer class="dl-footer"><a href="https://dliu.com">dliu.com</a> · <a href="/docs">Docs</a></footer>
+  <footer class="dl-footer">
+    <a class="dl-footer-logo" href="https://dliu.com" aria-label="dliu.com"><img src="https://files.dliu.com/dliu.com/favicon.png" alt="" width="24" height="24"></a>
+    <a href="https://dliu.com">dliu.com</a> · <a href="/docs">Docs</a>
+  </footer>
 </body>
 </html>
 ```
 
-- The DL icon always links to `https://dliu.com`; the app name always links to the app's home page (`/`).
+- Top left is the app's **own logo** and name, one link to the app's home page (`/`). The favicon is the same logo.
+  An app without a logo of its own uses the DL logo there.
+- Every footer starts with the shared **DL logo** (`dl-footer-logo`) linking to `https://dliu.com`, then the
+  `dliu.com` link and the app's own links, separated by ` · `.
+- Apps with more links than fit on a phone use the collapsible menu (below).
 - Put the header's links and buttons inside `<nav class="dl-nav">`, in this order: text links (`dl-nav-link`), then
   `Docs` (`dl-button`), then the app's main action (`dl-button dl-button-primary`, for example `＋ Upload`), then
   `Sign in` (`dl-button dl-signin`) or `Sign out` (`dl-button`). Mark the current page with `aria-current="page"`.
@@ -99,13 +106,17 @@ Load `dl-docs.css` after `dl.css`, and use the shared tabs between the sections:
 classes are the diagram kit (`dg-stats`/`dg-stat`, `dg-flow`/`dg-step`/`dg-arrow`, `dg-tier`/`dg-node`, `dg-callout`,
 `dg-more`, `dg-icon` with `--dg` set to its colour, and the `dg-untrusted`, `dg-edge`, `dg-private`, `dg-app`,
 `dg-good`, `dg-warn`, `dg-bad` variants); the app's diagram script builds them.
+Read-more cards linking to other docs pages: `dl-docs-cards` holding `a.dl-docs-card` links, each with a `dg-icon` and a
+`dl-docs-card-text` (`strong` title, `dl-docs-card-line` text, `dl-docs-card-key` "Read more →"). In security tables,
+`.status` is green and `.status.fixed` amber.
 
 ## Components
 
 | Class | Use |
 | --- | --- |
 | `dl-page` | On `<body>`: header on top, main fills the screen, footer at the bottom |
-| `dl-header`, `dl-logo`, `dl-brand`, `dl-nav` | The menu bar (see the skeleton) |
+| `dl-header`, `dl-brand`, `dl-logo`, `dl-nav` | The menu bar: the app's logo (`img.dl-logo`) and name in one `dl-brand` link, then the nav (see the skeleton) |
+| `dl-menu-toggle`, `dl-nav-collapsible` | Collapsible menu for apps with many links (markup below) |
 | `dl-nav-link` | Plain text link in the menu bar |
 | `dl-button` | Every button, on `<a>` or `<button>` |
 | `dl-button dl-button-primary` | The main action on a page or form (one per area) |
@@ -116,7 +127,7 @@ classes are the diagram kit (`dg-stats`/`dg-stat`, `dg-flow`/`dg-step`/`dg-arrow
 | `dl-ms-signin` | Large "Sign in with Microsoft" button for a sign-in page or a private page's landing card (markup below) |
 | `dl-account` | The signed-in account name, next to Sign out |
 | `dl-main`, `dl-narrow` | Page content width |
-| `dl-footer` | Footer: `dliu.com` link first, then the app's own links, separated by ` · ` |
+| `dl-footer`, `dl-footer-logo` | Footer: the DL logo, the `dliu.com` link, then the app's own links, separated by ` · ` |
 | `dl-tabs` | Tabs: links or buttons; `aria-current="page"` or `aria-selected="true"` marks the open tab |
 | `dl-language`, `dl-language-toggle`, `dl-languages` | Chinese/English switcher (markup below) |
 | `dl-button` with `aria-pressed="true"` | A toggle button that is on |
@@ -155,6 +166,15 @@ and on narrow screens (≤ 600 px, where only the 文/A button shows) toggles th
     <button type="button" data-language="en" lang="en" aria-pressed="false">English</button>
   </div>
 </div>
+```
+
+Collapsible menu: on screens up to 600 px the nav hides behind a ☰ button. Put the button just before the nav; the
+app's script toggles the `is-open` class on the nav and `aria-expanded` on the button (and closes it on Escape or a tap
+outside). A language switcher inside the nav shows both languages when the menu is open:
+
+```html
+<button type="button" class="dl-button dl-menu-toggle" aria-controls="dl-menu" aria-expanded="false" aria-label="Menu">☰</button>
+<nav id="dl-menu" class="dl-nav dl-nav-collapsible" aria-label="Site">…</nav>
 ```
 
 Dialog (a native `<dialog>`; the app's script calls `showModal()` and `close()`):
@@ -210,7 +230,8 @@ img-src   'self' https://files.dliu.com/dliu.com/
 
 ## Checklist for a new or updated app
 
-- [ ] Every page loads `dl.css` before the app's stylesheet and uses the DL icon as its favicon; Docs/About pages also
+- [ ] Every page loads `dl.css` before the app's stylesheet, shows the app's own logo top left and as its favicon, and has
+      the DL logo in the footer; Docs/About pages also
       load `dl-docs.css` and use `dl-tabs`.
 - [ ] Every page has the shared header and footer; the app's own CSS defines no header, button or footer styles.
 - [ ] The app's CSS uses `--dl-*` variables, not its own palette.

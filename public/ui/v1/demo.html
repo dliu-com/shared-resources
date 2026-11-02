@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Shared UI v1 · dliu.com</title>
   <meta name="robots" content="noindex">
-  <link rel="icon" type="image/png" href="https://files.dliu.com/dliu.com/favicon.png">
+  <link rel="icon" href="example-logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="https://files.dliu.com/dliu.com/ui/v1/dl.css">
   <link rel="stylesheet" href="https://files.dliu.com/dliu.com/ui/v1/dl-docs.css">
 </head>
 <body class="dl-page">
   <header class="dl-header">
-    <a class="dl-logo" href="https://dliu.com" aria-label="dliu.com"><img src="https://files.dliu.com/dliu.com/favicon.png" alt="DL" width="32" height="32"></a>
-    <a class="dl-brand" href="#">Shared UI</a>
+    <a class="dl-brand" href="#"><img class="dl-logo" src="example-logo.svg" alt="" width="32" height="32">Shared UI</a>
     <nav class="dl-nav" aria-label="Site">
       <a class="dl-nav-link" href="#" aria-current="page">Components</a>
       <a class="dl-nav-link" href="#buttons">Buttons</a>
@@ -30,7 +29,7 @@
 
   <main class="dl-main dl-narrow">
     <h1>dliu.com shared UI, v1</h1>
-    <p class="dl-muted">Every dliu.com site loads <code>https://files.dliu.com/dliu.com/ui/v1/dl.css</code> before its own stylesheet. The header above is the shared menu bar: the DL icon links to dliu.com and the site name links to the site’s home page.</p>
+    <p class="dl-muted">Every dliu.com site loads <code>https://files.dliu.com/dliu.com/ui/v1/dl.css</code> before its own stylesheet. The header above is the shared menu bar: each app shows its own logo and name there, linking to its home page (this page uses a sample logo). The shared DL logo is in the footer.</p>
 
     <h2 id="buttons">Buttons</h2>
     <p>
@@ -53,8 +52,7 @@
 
     <h2>Header with an owner signed in</h2>
     <header class="dl-header">
-      <a class="dl-logo" href="https://dliu.com" aria-label="dliu.com"><img src="https://files.dliu.com/dliu.com/favicon.png" alt="DL" width="32" height="32"></a>
-      <a class="dl-brand" href="#">Video</a>
+      <a class="dl-brand" href="#"><img class="dl-logo" src="example-logo.svg" alt="" width="32" height="32">Video</a>
       <nav class="dl-nav" aria-label="Example">
         <a class="dl-button" href="#">Docs</a>
         <a class="dl-button dl-button-primary" href="#">＋ Upload</a>
@@ -108,6 +106,9 @@
     </div>
   </main>
 
-  <footer class="dl-footer"><a href="https://dliu.com">dliu.com</a> · <a href="https://github.com/dliu-com/shared-resources">Source</a></footer>
+  <footer class="dl-footer">
+    <a class="dl-footer-logo" href="https://dliu.com" aria-label="dliu.com"><img src="https://files.dliu.com/dliu.com/favicon.png" alt="" width="24" height="24"></a>
+    <a href="https://dliu.com">dliu.com</a> · <a href="https://github.com/dliu-com/shared-resources">Source</a>
+  </footer>
 </body>
 </html>

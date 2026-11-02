@@ -2,8 +2,8 @@
  * dliu.com shared UI, v1: https://files.dliu.com/dliu.com/ui/v1/dl.css
  * Source: https://github.com/dliu-com/shared-resources (public/ui/v1/dl.css)
  *
- * One look for every dliu.com site: colours, header (menu bar) with the DL icon, buttons,
- * sign-in buttons, page layout and footer. Load it before the site's own stylesheet.
+ * One look for every dliu.com site: colours, header (menu bar) with the app's own logo, buttons,
+ * sign-in buttons, page layout and footer with the DL logo. Load it before the site's own stylesheet.
  * Classes start with dl- so they never clash with a site's own names. Element defaults use
  * :where() (no specificity), so any site rule overrides them.
  * v1 only gains things; a change that would break a page goes to v2.
@@ -69,11 +69,12 @@
 .dl-main.dl-narrow { max-width: 760px; }
 
 /* ---------- Header (menu bar) ----------
+   The app's own logo and name, linking to the app's home page:
    <header class="dl-header">
-     <a class="dl-logo" href="https://dliu.com" aria-label="dliu.com"><img src="https://files.dliu.com/dliu.com/favicon.png" alt="DL" width="32" height="32"></a>
-     <a class="dl-brand" href="/">Site name</a>
+     <a class="dl-brand" href="/"><img class="dl-logo" src="/logo.svg" alt="" width="32" height="32">Site name</a>
      <nav class="dl-nav" aria-label="Site"> dl-nav-link links and dl-button buttons </nav>
-   </header> */
+   </header>
+   (The earlier form, <a class="dl-logo" href="…"><img …></a> beside the dl-brand link, still works.) */
 .dl-header {
   position: sticky; top: 0; z-index: 20;
   display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; min-height: 60px;
@@ -82,9 +83,12 @@
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   font-family: var(--dl-font);
 }
-.dl-logo { display: flex; flex: none; border-radius: 7px; }
-.dl-logo img { display: block; width: 32px; height: 32px; }
-.dl-brand { flex: none; font: 650 18px/1.2 var(--dl-font); color: var(--dl-text); white-space: nowrap; text-decoration: none; }
+a.dl-logo { display: flex; flex: none; border-radius: 7px; }
+a.dl-logo img, img.dl-logo { display: block; flex: none; width: 32px; height: 32px; object-fit: contain; }
+.dl-brand {
+  display: inline-flex; align-items: center; gap: 10px; flex: none;
+  font: 650 18px/1.2 var(--dl-font); color: var(--dl-text); white-space: nowrap; text-decoration: none;
+}
 .dl-brand:hover { color: var(--dl-text); text-decoration: none; }
 .dl-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px; margin-left: auto; }
 /* Plain text links in the menu bar. */
@@ -92,6 +96,27 @@
 .dl-nav-link:hover { color: var(--dl-text); text-decoration: none; }
 .dl-nav-link[aria-current] { color: var(--dl-text); font-weight: 600; box-shadow: inset 0 -2px 0 var(--dl-accent); }
 .dl-account { color: var(--dl-muted); font-size: 13px; overflow-wrap: anywhere; }
+
+/* Collapsible menu, for apps with more links than fit on a phone. On screens up to 600 px the nav hides behind a
+   ☰ button; the app's script toggles .is-open on the nav and aria-expanded on the button.
+   <button type="button" class="dl-button dl-menu-toggle" aria-controls="dl-menu" aria-expanded="false" aria-label="Menu">☰</button>
+   <nav id="dl-menu" class="dl-nav dl-nav-collapsible" aria-label="Site">…</nav> */
+.dl-button.dl-menu-toggle { display: none; margin-left: auto; padding: 8px 12px; font-size: 16px; }
+@media (max-width: 600px) {
+  .dl-button.dl-menu-toggle { display: inline-flex; }
+  .dl-nav.dl-nav-collapsible { display: none; }
+  .dl-nav.dl-nav-collapsible.is-open {
+    display: flex; flex-direction: column; align-items: stretch; gap: 4px;
+    position: absolute; top: 100%; left: 0; right: 0; z-index: 25; margin: 0;
+    padding: 8px max(var(--dl-gutter), env(safe-area-inset-right)) 12px max(var(--dl-gutter), env(safe-area-inset-left));
+    background: var(--dl-surface); border-bottom: 1px solid var(--dl-line); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
+  .dl-nav-collapsible.is-open .dl-nav-link { padding: 10px 4px; }
+  .dl-nav-collapsible.is-open .dl-nav-link[aria-current] { box-shadow: inset 3px 0 0 var(--dl-accent); padding-left: 12px; }
+  .dl-nav-collapsible.is-open .dl-language { align-self: flex-start; }
+  .dl-nav-collapsible.is-open .dl-button.dl-language-toggle { display: none; }
+  .dl-nav-collapsible.is-open .dl-languages { display: inline-flex; flex-direction: row; position: static; box-shadow: none; }
+}
 
 /* ---------- Buttons ----------
    <a class="dl-button" href="…">, <button class="dl-button dl-button-primary">,
@@ -178,6 +203,13 @@
   color: var(--dl-muted); font-size: 13px; text-align: center;
 }
 .dl-footer a { color: var(--dl-muted); }
+/* The shared DL logo, first in every footer:
+   <footer class="dl-footer">
+     <a class="dl-footer-logo" href="https://dliu.com" aria-label="dliu.com"><img src="https://files.dliu.com/dliu.com/favicon.png" alt="" width="24" height="24"></a>
+     <a href="https://dliu.com">dliu.com</a> · <a href="/docs">Docs</a>
+   </footer> */
+.dl-footer-logo { display: inline-flex; vertical-align: middle; margin-right: 8px; border-radius: 5px; }
+.dl-footer-logo img { display: block; width: 24px; height: 24px; }
 
 /* ---------- Content helpers ---------- */
 .dl-panel { padding: 18px; border: 1px solid var(--dl-line); border-radius: var(--dl-radius); background: var(--dl-panel); }

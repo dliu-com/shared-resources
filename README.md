@@ -40,8 +40,8 @@ make publish   # uploads only those files
 ## Checking the sites
 
 `sites.json` lists every dliu.com site and the pages to check. `make audit` fetches them live and reports any page that
-does not load `dl.css` (and `dl-docs.css` on docs pages), uses another favicon, lacks the shared header, or whose CSP
-blocks the shared files. Each app repo also has its own test for this.
+does not load `dl.css` (and `dl-docs.css` on docs pages), has no favicon, lacks the shared header (with the app's logo)
+or the DL logo in the footer, or whose CSP blocks the shared files. Each app repo also has its own test for this.
 
 ```sh
 make audit

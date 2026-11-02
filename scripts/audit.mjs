@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // Checks that every dliu.com site in sites.json uses the shared look, on the live pages:
 //   - loads https://files.dliu.com/dliu.com/ui/v1/dl.css (and dl-docs.css on docs pages)
-//   - uses the DL icon as favicon
-//   - has the shared header (dl-header with dl-logo and dl-brand) in its HTML,
+//   - has a favicon (the app's own logo)
+//   - has the shared header (dl-header with the app's dl-logo and dl-brand) in its HTML,
 //     unless the site sets "header": "script" (header drawn by the page's script)
+//   - has the DL logo in the footer (dl-footer-logo), unless the site sets "footer": "script"
 //   - its Content-Security-Policy, if any, allows the shared stylesheet folder and the DL icon
 //
 //   node scripts/audit.mjs [site …]     exit code 1 when any check fails
@@ -52,9 +53,12 @@ async function checkPage(site, url, isDocs) {
   if (cssIndex === -1) failures.push('dl.css not loaded');
   else if (styles.slice(0, cssIndex).some((href) => !href.startsWith(BASE))) failures.push('dl.css not loaded first');
   if (isDocs && !styles.includes(DOCS_CSS)) failures.push('dl-docs.css not loaded');
-  if (!linkHrefs(html, 'icon').includes(ICON)) failures.push('favicon is not the DL icon');
+  if (!linkHrefs(html, 'icon').filter(Boolean).length) failures.push('no favicon');
   if (site.header !== 'script' && !(/class=["']dl-header["']/.test(html) && /class=["']dl-logo["']/.test(html) && /class=["']dl-brand["']/.test(html))) {
     failures.push('no shared header');
+  }
+  if (site.footer !== 'script' && !new RegExp(`class=["']dl-footer-logo["'][^>]*>\\s*<img[^>]*src=["']${ICON.replace(/[.]/g, '\\.')}["']`).test(html)) {
+    failures.push('no DL logo in the footer');
   }
   if (!cspAllows(csp, 'style-src', CSS, response.url)) failures.push('CSP blocks dl.css');
   if (!cspAllows(csp, 'img-src', ICON, response.url)) failures.push('CSP blocks the DL icon');
