@@ -48,7 +48,7 @@
   font: inherit; padding: 9px 11px; border-radius: var(--dl-radius-small); border: 1px solid var(--dl-line);
   background: var(--dl-surface); color: var(--dl-text);
 }
-:where(input:not([type]), input[type=text], input[type=search], input[type=email], input[type=url], input[type=number], input[type=password], input[type=tel], textarea) { width: 100%; }
+:where(input:not([type]), input[type=text], input[type=search], input[type=email], input[type=url], input[type=number], input[type=password], input[type=tel], input[type=date], input[type=time], input[type=datetime-local], input[type=month], input[type=week], textarea) { width: 100%; }
 /* Same box for selects in every browser (Safari ignores padding and borders on native selects). The arrow is
    chevron.svg next to this file, so a CSP that allows https://files.dliu.com/dliu.com/ for images covers it. */
 :where(select:not([multiple]):not([size])) {
