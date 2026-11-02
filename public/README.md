@@ -130,8 +130,8 @@ classes are the diagram kit (`dg-stats`/`dg-stat`, `dg-flow`/`dg-step`/`dg-arrow
 | `dl-visually-hidden` | Text for screen readers only |
 | `dl-icon` | A 16 px stroke SVG icon inside a `dl-button` |
 
-Plain elements already get the shared look with no class: body text and font, links, `h1`, `h2`, text inputs, textareas
-and selects (full-width text fields, focus ring).
+Plain elements already get the shared look with no class: body text and font, links, `h1`, `h2`, text inputs, date and time
+inputs, textareas and selects (full-width text fields, focus ring).
 
 Microsoft sign-in button, following
 [Microsoft's branding guidelines](https://learn.microsoft.com/entra/identity-platform/howto-add-branding-in-apps):

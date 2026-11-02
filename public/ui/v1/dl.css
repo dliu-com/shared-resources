@@ -44,7 +44,7 @@
 :where(a:hover) { text-decoration: underline; }
 :where(h1) { font-size: 24px; margin: 0 0 16px; }
 :where(h2) { font-size: 18px; margin: 24px 0 12px; }
-:where(input:not([type]), input[type=text], input[type=search], input[type=email], input[type=url], input[type=number], input[type=password], input[type=tel], textarea, select) {
+:where(input:not([type]), input[type=text], input[type=search], input[type=email], input[type=url], input[type=number], input[type=password], input[type=tel], input[type=date], input[type=time], input[type=datetime-local], input[type=month], input[type=week], textarea, select) {
   font: inherit; padding: 9px 11px; border-radius: var(--dl-radius-small); border: 1px solid var(--dl-line);
   background: var(--dl-surface); color: var(--dl-text);
 }
@@ -251,5 +251,5 @@
   .dl-segmented > button, .dl-segmented > a { min-height: 44px; }
   .dl-dialog-close { width: 44px; height: 44px; }
   .dl-nav-link { display: inline-flex; align-items: center; min-height: 44px; }
-  :where(input:not([type]), input[type=text], input[type=search], input[type=email], input[type=url], input[type=number], input[type=password], input[type=tel], textarea, select) { font-size: 16px; }
+  :where(input:not([type]), input[type=text], input[type=search], input[type=email], input[type=url], input[type=number], input[type=password], input[type=tel], input[type=date], input[type=time], input[type=datetime-local], input[type=month], input[type=week], textarea, select) { font-size: 16px; }
 }

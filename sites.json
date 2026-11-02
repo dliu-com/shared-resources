@@ -8,7 +8,7 @@
   { "site": "traffic.dliu.com", "repo": "dliu-com/traffic-monitor", "pages": ["https://traffic.dliu.com/"], "docs": ["https://traffic.dliu.com/about"] },
   { "site": "plan.dliu.com", "repo": "dliu-com/travel-plan", "pages": ["https://plan.dliu.com/"], "docs": ["https://plan.dliu.com/docs/api"] },
   { "site": "auth.dliu.com", "repo": "dliu-com/authenticate", "pages": ["https://auth.dliu.com/", "https://auth.dliu.com/redirect.html"], "docs": ["https://auth.dliu.com/docs", "https://auth.dliu.com/docs/api"] },
-  { "site": "jh.dliu.com", "repo": "dliu-com/hujia", "pages": ["https://jh.dliu.com/"] },
+  { "site": "jh.dliu.com", "repo": "dliu-com/hujia", "pages": ["https://jh.dliu.com/"], "docs": ["https://jh.dliu.com/about", "https://jh.dliu.com/security"] },
   { "site": "weiqi.dliu.com", "repo": "dliu-com/weiqi", "pages": ["https://weiqi.dliu.com/"], "header": "script" },
   { "site": "xiangqi.dliu.com", "repo": "xiangqi", "pages": ["https://xiangqi.dliu.com/"] },
   { "site": "link.dliu.com", "repo": "link-router", "pages": [], "skip": "redirects only (CloudFront Function), no HTML pages" }
