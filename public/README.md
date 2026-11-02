@@ -229,7 +229,30 @@ style-src 'self' https://files.dliu.com/dliu.com/ui/
 img-src   'self' https://files.dliu.com/dliu.com/
 ```
 
-`script-src` needs nothing, because no JavaScript is shared.
+`script-src` needs nothing for the shared look, because no JavaScript is shared. (The optional traffic script below adds
+its own two sources.)
+
+## Traffic monitoring (optional page script)
+
+Page views and visitors are counted from CloudFront logs for every site, with nothing on the page. For time on page,
+scroll depth and load time, add traffic.dliu.com's page script to every page:
+
+```html
+<script src="https://traffic.dliu.com/t/s.js" async></script>
+```
+
+```
+script-src  'self' https://traffic.dliu.com/t/s.js
+connect-src 'self' https://traffic.dliu.com/t/e
+```
+
+- The script stays on traffic.dliu.com, not here: one script serves every site with its report address built in, and
+  traffic's edge function both serves it and checks the reports, so the two always deploy together.
+- Reports count only when the site's host is listed in traffic's `config/sites.json` and the report comes from that
+  host's pages (its Origin or Referer must match; reports with neither are dropped). For a new site, ask
+  traffic.dliu.com (dliu-com/traffic-monitor) to add it.
+- Logging for a new CloudFront distribution: see "Adding a site" in
+  https://github.com/dliu-com/traffic-monitor#readme.
 
 ## Checklist for a new or updated app
 
@@ -240,6 +263,7 @@ img-src   'self' https://files.dliu.com/dliu.com/
 - [ ] The app's CSS uses `--dl-*` variables, not its own palette.
 - [ ] The CSP allows the two paths above.
 - [ ] The repo has a test that keeps the pages on the shared look.
+- [ ] Optional: the traffic page script is on every page and the site is in traffic's `config/sites.json`.
 - [ ] The app is listed in `sites.json` in the source repo, and `make audit` passes for it.
 - [ ] Checked on a phone-sized screen (≤ 400 px): the header wraps cleanly and buttons are at least 44 px tall on touch screens.
 
