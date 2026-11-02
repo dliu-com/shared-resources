@@ -8,12 +8,15 @@
 // FILES_API_TOKEN_FILE. Unchanged files are skipped; the token and presigned URLs are never printed.
 
 import { createHash } from 'node:crypto';
-import { readdir, readFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'public');
+// SHA-256 of what this checkout last published, per key (not committed). The CDN may serve an old copy for a while,
+// so it is only used for a first publish from a fresh checkout.
+const STATE = path.join(ROOT, '..', '.published.json');
 const SITE = 'https://files.dliu.com';
 const PREFIX = 'dliu.com';
 const TYPES = {
@@ -54,6 +57,15 @@ const singlePartEtag = (bytes) => {
   return `"${createHash('md5').update(inner).digest('hex')}-1"`;
 };
 
+const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
+
+async function listing() {
+  const response = await fetch(`${SITE}/_data/files.json`, { cache: 'no-store' });
+  if (!response.ok) throw new Error(`Could not read the Files listing (${response.status})`);
+  const data = await response.json();
+  return new Map((data.files || data).map((file) => [file.path, file]));
+}
+
 async function liveEtag(key) {
   const response = await fetch(`${SITE}/${key.split('/').map(encodeURIComponent).join('/')}`, { method: 'HEAD', redirect: 'manual' });
   return response.ok ? { etag: response.headers.get('etag'), type: response.headers.get('content-type') } : null;
@@ -62,6 +74,8 @@ async function liveEtag(key) {
 async function main() {
   const dryRun = process.argv.includes('--dry-run');
   const files = await listFiles(ROOT);
+  const listed = await listing();
+  const state = JSON.parse(await readFile(STATE, 'utf8').catch(() => '{}'));
   const changed = [];
   for (const file of files) {
     const rel = path.relative(ROOT, file).split(path.sep).join('/');
@@ -69,15 +83,24 @@ async function main() {
     if (!type) throw new Error(`No content type for ${rel}; add its extension to TYPES`);
     const bytes = await readFile(file);
     const key = `${PREFIX}/${rel}`;
-    const live = await liveEtag(key);
-    if (live && live.etag === singlePartEtag(bytes) && live.type === type) {
+    const hash = sha256(bytes);
+    const entry = listed.get(key);
+    const sameListing = entry && entry.size === bytes.length && entry.type === type;
+    let unchanged = sameListing && state[key] === hash;
+    if (sameListing && !(key in state)) {
+      const live = await liveEtag(key);
+      unchanged = Boolean(live) && live.etag === singlePartEtag(bytes);
+      if (unchanged) state[key] = hash;
+    }
+    if (unchanged) {
       console.log(`unchanged  ${SITE}/${key}`);
       continue;
     }
-    changed.push({ key, type, bytes, exists: Boolean(live) });
+    changed.push({ key, type, bytes, hash, exists: Boolean(entry) });
   }
   if (!changed.length || dryRun) {
     for (const { key } of changed) console.log(`would send ${SITE}/${key}`);
+    if (!dryRun) await writeFile(STATE, `${JSON.stringify(state, null, 2)}\n`);
     return;
   }
 
@@ -95,7 +118,7 @@ async function main() {
     return data;
   };
 
-  for (const { key, type, bytes, exists } of changed) {
+  for (const { key, type, bytes, hash, exists } of changed) {
     const start = await call('/api/uploads', { path: key, size: bytes.length, contentType: type, ...(exists ? { overwrite: true } : {}) });
     try {
       if (start.partCount !== 1) throw new Error(`${key} is too big for a one-part upload`);
@@ -108,6 +131,8 @@ async function main() {
       throw error;
     }
     console.log(`${exists ? 'replaced' : 'added'}   ${SITE}/${key}`);
+    state[key] = hash;
+    await writeFile(STATE, `${JSON.stringify(state, null, 2)}\n`);
   }
 }
 
