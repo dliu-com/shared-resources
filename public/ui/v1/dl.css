@@ -49,6 +49,12 @@
   background: var(--dl-surface); color: var(--dl-text);
 }
 :where(input:not([type]), input[type=text], input[type=search], input[type=email], input[type=url], input[type=number], input[type=password], input[type=tel], textarea) { width: 100%; }
+/* Same box for selects in every browser (Safari ignores padding and borders on native selects). The arrow is
+   chevron.svg next to this file, so a CSP that allows https://files.dliu.com/dliu.com/ for images covers it. */
+:where(select:not([multiple]):not([size])) {
+  -webkit-appearance: none; appearance: none; padding-right: 32px; line-height: normal;
+  background-image: url("chevron.svg"); background-repeat: no-repeat; background-position: right 11px center; background-size: 12px 8px;
+}
 :where(input, textarea, select):focus { outline: 2px solid var(--dl-focus); border-color: var(--dl-accent); }
 :where(a, button, summary):focus-visible { outline: 2px solid var(--dl-accent); outline-offset: 2px; }
 [hidden] { display: none !important; }
