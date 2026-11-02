@@ -3,7 +3,7 @@
   { "site": "home.dliu.com", "repo": "dliu-com/home", "pages": ["https://home.dliu.com/", "https://home.dliu.com/laundry.html", "https://home.dliu.com/guinea-pigs.html", "https://home.dliu.com/hang-clothes.html", "https://home.dliu.com/kaka-teeth.html", "https://home.dliu.com/rules.html"] },
   { "site": "video.dliu.com", "repo": "dliu-com/video", "pages": ["https://video.dliu.com/"], "docs": ["https://video.dliu.com/docs", "https://video.dliu.com/docs/api"] },
   { "site": "blog.dliu.com", "repo": "dliu-com/blog", "pages": ["https://blog.dliu.com/"], "docs": ["https://blog.dliu.com/docs", "https://blog.dliu.com/docs/api"] },
-  { "site": "files.dliu.com", "repo": "dliu-com/file-server", "pages": ["https://files.dliu.com/"], "docs": ["https://files.dliu.com/docs/api"] },
+  { "site": "files.dliu.com", "repo": "dliu-com/file-server", "pages": ["https://files.dliu.com/"], "docs": ["https://files.dliu.com/docs", "https://files.dliu.com/docs/api"] },
   { "site": "share.dliu.com", "repo": "dliu-com/file-sharing", "pages": ["https://share.dliu.com/", "https://share.dliu.com/admin"], "docs": ["https://share.dliu.com/docs"] },
   { "site": "traffic.dliu.com", "repo": "dliu-com/traffic-monitor", "pages": ["https://traffic.dliu.com/"], "docs": ["https://traffic.dliu.com/about", "https://traffic.dliu.com/detect-bot", "https://traffic.dliu.com/cost", "https://traffic.dliu.com/security"] },
   { "site": "plan.dliu.com", "repo": "dliu-com/travel-plan", "pages": ["https://plan.dliu.com/"], "docs": ["https://plan.dliu.com/about", "https://plan.dliu.com/security", "https://plan.dliu.com/docs/api"] },
