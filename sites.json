@@ -10,7 +10,7 @@
   { "site": "auth.dliu.com", "repo": "dliu-com/authenticate", "pages": ["https://auth.dliu.com/", "https://auth.dliu.com/redirect.html"], "docs": ["https://auth.dliu.com/docs", "https://auth.dliu.com/docs/api"] },
   { "site": "jh.dliu.com", "repo": "dliu-com/hujia", "pages": ["https://jh.dliu.com/"], "docs": ["https://jh.dliu.com/about", "https://jh.dliu.com/security"] },
   { "site": "weiqi.dliu.com", "repo": "dliu-com/weiqi", "pages": ["https://weiqi.dliu.com/"], "docs": ["https://weiqi.dliu.com/docs", "https://weiqi.dliu.com/docs/cost", "https://weiqi.dliu.com/docs/security", "https://weiqi.dliu.com/docs/benchmarks", "https://weiqi.dliu.com/docs/photo-recognition", "https://weiqi.dliu.com/guide"], "header": "script" },
-  { "site": "xiangqi.dliu.com", "repo": "dliu-com/xiangqi", "pages": ["https://xiangqi.dliu.com/"] },
+  { "site": "xiangqi.dliu.com", "repo": "dliu-com/xiangqi", "pages": ["https://xiangqi.dliu.com/"], "docs": ["https://xiangqi.dliu.com/docs"] },
   { "site": "cyy.dliu.com", "repo": "dliu-com/chenyiyu", "pages": ["https://cyy.dliu.com/", "https://cyy.dliu.com/aiyou/"] },
   { "site": "link.dliu.com", "repo": "link-router", "pages": [], "skip": "redirects only (CloudFront Function), no HTML pages" }
 ]
