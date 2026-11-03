@@ -5,7 +5,7 @@
   { "site": "blog.dliu.com", "repo": "dliu-com/blog", "pages": ["https://blog.dliu.com/"], "docs": ["https://blog.dliu.com/docs", "https://blog.dliu.com/docs/api"] },
   { "site": "files.dliu.com", "repo": "dliu-com/file-server", "pages": ["https://files.dliu.com/"], "docs": ["https://files.dliu.com/docs", "https://files.dliu.com/docs/api"] },
   { "site": "share.dliu.com", "repo": "dliu-com/file-sharing", "pages": ["https://share.dliu.com/", "https://share.dliu.com/admin"], "docs": ["https://share.dliu.com/docs"] },
-  { "site": "traffic.dliu.com", "repo": "dliu-com/traffic-monitor", "pages": ["https://traffic.dliu.com/"], "docs": ["https://traffic.dliu.com/about", "https://traffic.dliu.com/detect-bot", "https://traffic.dliu.com/cost", "https://traffic.dliu.com/security"] },
+  { "site": "traffic.dliu.com", "repo": "dliu-com/traffic-monitor", "pages": ["https://traffic.dliu.com/"], "docs": ["https://traffic.dliu.com/docs"] },
   { "site": "plan.dliu.com", "repo": "dliu-com/travel-plan", "pages": ["https://plan.dliu.com/"], "docs": ["https://plan.dliu.com/about", "https://plan.dliu.com/security", "https://plan.dliu.com/docs/api"] },
   { "site": "auth.dliu.com", "repo": "dliu-com/authenticate", "pages": ["https://auth.dliu.com/", "https://auth.dliu.com/redirect.html"], "docs": ["https://auth.dliu.com/docs", "https://auth.dliu.com/docs/api"] },
   { "site": "jh.dliu.com", "repo": "dliu-com/hujia", "pages": ["https://jh.dliu.com/"], "docs": ["https://jh.dliu.com/about", "https://jh.dliu.com/security"] },
