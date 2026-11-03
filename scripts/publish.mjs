@@ -1,24 +1,29 @@
 #!/usr/bin/env node
-// Publishes public/ to https://files.dliu.com/dliu.com/ through the Files managed API
-// (dliu-com/file-server). public/ui/v1/dl.css becomes https://files.dliu.com/dliu.com/ui/v1/dl.css.
+// Publishes public/ to https://files.dliu.com/dliu.com/ by writing straight to the Files bucket
+// (dliu-com/file-server) with your AWS CLI credentials. public/ui/v1/dl.css becomes
+// https://files.dliu.com/dliu.com/ui/v1/dl.css.
 //
-//   FILES_API_URL=<FileServer MicrosoftApiUrl> node scripts/publish.mjs [--dry-run]
+//   FILES_BUCKET=<FileServer FileBucketName> node scripts/publish.mjs [--dry-run]
 //
-// The Microsoft access token comes from ~/.dliu_token (Save file at https://auth.dliu.com), or
-// FILES_API_TOKEN_FILE. Unchanged files are skipped; the token and presigned URLs are never printed.
+// The Files API cannot write dliu.com/ (a reserved path, and its role is denied there), so only a deployer's
+// AWS credentials can. Objects get the same content type, cache header and storage class Files gives uploads.
+// Replacing an object makes Files clear CloudFront's copy within about a minute (S3 event → its clear function).
+// Each object carries the SHA-256 of its bytes, so unchanged files are skipped without trusting the CDN.
 
+import { execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readdir, readFile, writeFile } from 'node:fs/promises';
-import os from 'node:os';
+import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 
+const run = promisify(execFile);
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'public');
-// SHA-256 of what this checkout last published, per key (not committed). The CDN may serve an old copy for a while,
-// so it is only used for a first publish from a fresh checkout.
-const STATE = path.join(ROOT, '..', '.published.json');
 const SITE = 'https://files.dliu.com';
 const PREFIX = 'dliu.com';
+// Same as Files' own uploads (file-server lambda/api/store.js FILE_CACHE_CONTROL and STORAGE_CLASS).
+const CACHE_CONTROL = 'public, max-age=300, s-maxage=86400, stale-while-revalidate=86400';
+const STORAGE_CLASS = 'INTELLIGENT_TIERING';
 const TYPES = {
   '.css': 'text/css; charset=utf-8',
   '.html': 'text/html; charset=utf-8',
@@ -41,99 +46,50 @@ async function listFiles(dir) {
   return out.sort();
 }
 
-async function readToken() {
-  const file = process.env.FILES_API_TOKEN_FILE || path.join(os.homedir(), '.dliu_token');
-  const fields = Object.fromEntries((await readFile(file, 'utf8')).split(/\r?\n/).filter(Boolean)
-    .map((line) => [line.slice(0, line.indexOf('=')), line.slice(line.indexOf('=') + 1)]));
-  if (!fields.token || !fields.expires_at) throw new Error(`${file} needs token= and expires_at= lines; use Save file at auth.dliu.com`);
-  if (Date.parse(fields.expires_at) <= Date.now() + 60_000) throw new Error('The saved token has expired; save a fresh one at auth.dliu.com');
-  return fields.token;
-}
+const aws = async (...args) => JSON.parse((await run('aws', [...args, '--output', 'json'], { maxBuffer: 1 << 20 })).stdout || '{}');
 
-// Files uploads are multipart with parts of at least 16 MiB, so small files are one part:
-// S3's ETag is then md5(md5(bytes)) followed by -1.
-const singlePartEtag = (bytes) => {
-  const inner = createHash('md5').update(bytes).digest();
-  return `"${createHash('md5').update(inner).digest('hex')}-1"`;
-};
-
-const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
-
-async function listing() {
-  const response = await fetch(`${SITE}/_data/files.json`, { cache: 'no-store' });
-  if (!response.ok) throw new Error(`Could not read the Files listing (${response.status})`);
-  const data = await response.json();
-  return new Map((data.files || data).map((file) => [file.path, file]));
-}
-
-async function liveEtag(key) {
-  const response = await fetch(`${SITE}/${key.split('/').map(encodeURIComponent).join('/')}`, { method: 'HEAD', redirect: 'manual' });
-  return response.ok ? { etag: response.headers.get('etag'), type: response.headers.get('content-type') } : null;
+async function head(bucket, key) {
+  try {
+    return await aws('s3api', 'head-object', '--bucket', bucket, '--key', key);
+  } catch (error) {
+    if (/\b(404|Not Found|NoSuchKey)\b/.test(String(error.stderr || error.message))) return null;
+    throw new Error(`Could not read s3://${bucket}/${key}: ${String(error.stderr || error.message).trim()}`);
+  }
 }
 
 async function main() {
   const dryRun = process.argv.includes('--dry-run');
-  const files = await listFiles(ROOT);
-  const listed = await listing();
-  const state = JSON.parse(await readFile(STATE, 'utf8').catch(() => '{}'));
+  const bucket = process.env.FILES_BUCKET;
+  if (!bucket || !/^[a-z0-9.-]{3,63}$/.test(bucket)) throw new Error('Set FILES_BUCKET to the FileServer FileBucketName output (make publish does this)');
+
   const changed = [];
-  for (const file of files) {
+  for (const file of await listFiles(ROOT)) {
     const rel = path.relative(ROOT, file).split(path.sep).join('/');
     const type = TYPES[path.extname(file).toLowerCase()];
     if (!type) throw new Error(`No content type for ${rel}; add its extension to TYPES`);
     const bytes = await readFile(file);
+    const sha256 = createHash('sha256').update(bytes).digest('hex');
     const key = `${PREFIX}/${rel}`;
-    const hash = sha256(bytes);
-    const entry = listed.get(key);
-    const sameListing = entry && entry.size === bytes.length && entry.type === type;
-    let unchanged = sameListing && state[key] === hash;
-    if (sameListing && !(key in state)) {
-      const live = await liveEtag(key);
-      unchanged = Boolean(live) && live.etag === singlePartEtag(bytes);
-      if (unchanged) state[key] = hash;
-    }
-    if (unchanged) {
+    const live = await head(bucket, key);
+    const same = live && live.Metadata && live.Metadata.sha256 === sha256 && live.ContentType === type && live.CacheControl === CACHE_CONTROL;
+    if (same) {
       console.log(`unchanged  ${SITE}/${key}`);
       continue;
     }
-    changed.push({ key, type, bytes, hash, exists: Boolean(entry) });
-  }
-  if (!changed.length || dryRun) {
-    for (const { key } of changed) console.log(`would send ${SITE}/${key}`);
-    if (!dryRun) await writeFile(STATE, `${JSON.stringify(state, null, 2)}\n`);
-    return;
+    changed.push({ file, key, type, sha256, exists: Boolean(live) });
   }
 
-  const api = new URL(process.env.FILES_API_URL || '');
-  if (api.protocol !== 'https:' || api.pathname !== '/') throw new Error('FILES_API_URL must be the HTTPS FileServer MicrosoftApiUrl');
-  const token = await readToken();
-  const call = async (route, body) => {
-    const response = await fetch(new URL(route, api), {
-      method: 'POST', redirect: 'error',
-      headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(`${route} ${response.status}: ${data.error || data.message || 'request failed'}`);
-    return data;
-  };
-
-  for (const { key, type, bytes, hash, exists } of changed) {
-    const start = await call('/api/uploads', { path: key, size: bytes.length, contentType: type, ...(exists ? { overwrite: true } : {}) });
-    try {
-      if (start.partCount !== 1) throw new Error(`${key} is too big for a one-part upload`);
-      const { urls } = await call('/api/uploads/parts', { token: start.token, parts: [1] });
-      const put = await fetch(urls['1'], { method: 'PUT', body: bytes, redirect: 'error' });
-      if (!put.ok) throw new Error(`S3 refused ${key} (${put.status})`);
-      await call('/api/uploads/complete', { token: start.token, parts: [{ partNumber: 1, etag: put.headers.get('etag') }] });
-    } catch (error) {
-      await call('/api/uploads/abort', { token: start.token }).catch(() => {});
-      throw error;
+  for (const { file, key, type, sha256, exists } of changed) {
+    if (dryRun) {
+      console.log(`would send ${SITE}/${key}`);
+      continue;
     }
+    await aws('s3api', 'put-object', '--bucket', bucket, '--key', key, '--body', file,
+      '--content-type', type, '--cache-control', CACHE_CONTROL, '--storage-class', STORAGE_CLASS,
+      '--metadata', `sha256=${sha256}`, '--checksum-algorithm', 'SHA256');
     console.log(`${exists ? 'replaced' : 'added'}   ${SITE}/${key}`);
-    state[key] = hash;
-    await writeFile(STATE, `${JSON.stringify(state, null, 2)}\n`);
   }
+  if (!dryRun && changed.some((c) => c.exists)) console.log('Files clears the CDN copy of replaced files within about a minute.');
 }
 
 main().catch((error) => { console.error(error.message); process.exitCode = 1; });

@@ -27,15 +27,22 @@ Everything under `public/` is published to `https://files.dliu.com/dliu.com/` by
 
 ## Publishing
 
-Requires Node.js 22+, AWS CLI access to the `FileServer` stack outputs (eu-west-1), and a Microsoft access token saved with
-**Save file** at https://auth.dliu.com (`~/.dliu_token`) for an account that may use the Files API (`files.write`).
+`dliu.com/` is a reserved path in Files: its API cannot write there, and the API's role is denied it, so no Files API
+token can change the shared assets. Publishing writes straight to the Files S3 bucket with your AWS CLI credentials
+(eu-west-1; needs `s3:PutObject` and `s3:GetObject` on `dliu.com/*` in the bucket and read access to the `FileServer`
+stack outputs). Requires Node.js 22+ and AWS CLI v2.
 
 ```sh
-make check     # lists files that differ from what is published
-make publish   # uploads only those files
+make check     # lists files whose bytes, type or cache header differ from what is in S3
+make publish   # writes only those files
 ```
 
-`FILES_API_URL` can be set instead of reading the stack output. The script never prints the token or the presigned URLs.
+- Objects get the same content type, cache header (`public, max-age=300, s-maxage=86400, …`) and storage class
+  (Intelligent-Tiering) as files uploaded through Files, plus a `sha256` metadata tag used to skip unchanged files.
+- Files clears CloudFront's copy of every replaced object automatically (S3 event → its clear function), usually
+  within a minute; browsers may keep their copy for up to 5 minutes more.
+- The bucket comes from the `FileServer` stack's `FileBucketName` output; set `FILES_BUCKET` to skip that lookup.
+- Writes bypass the Files listing (`_data/files.json`), which the Files app owns.
 
 ## Checking the sites
 
