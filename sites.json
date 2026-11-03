@@ -1,6 +1,5 @@
 [
   { "site": "dliu.com", "repo": "dliu-com/home-site", "pages": ["https://dliu.com/"] },
-  { "site": "home.dliu.com", "repo": "dliu-com/home", "pages": ["https://home.dliu.com/", "https://home.dliu.com/laundry.html", "https://home.dliu.com/guinea-pigs.html", "https://home.dliu.com/hang-clothes.html", "https://home.dliu.com/kaka-teeth.html", "https://home.dliu.com/rules.html"] },
   { "site": "video.dliu.com", "repo": "dliu-com/video", "pages": ["https://video.dliu.com/"], "docs": ["https://video.dliu.com/docs", "https://video.dliu.com/docs/api"] },
   { "site": "blog.dliu.com", "repo": "dliu-com/blog", "pages": ["https://blog.dliu.com/"], "docs": ["https://blog.dliu.com/docs", "https://blog.dliu.com/docs/api"] },
   { "site": "files.dliu.com", "repo": "dliu-com/file-server", "pages": ["https://files.dliu.com/"], "docs": ["https://files.dliu.com/docs", "https://files.dliu.com/docs/api"] },

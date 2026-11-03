@@ -63,7 +63,6 @@ All on `ui/v1` since 2 Nov 2026; `make audit` passes for every page in `sites.js
 | [weiqi.dliu.com](https://weiqi.dliu.com) | dliu-com/weiqi | own (Go stones) |
 | [xiangqi.dliu.com](https://xiangqi.dliu.com) | dliu-com/xiangqi | own (象) |
 | [dliu.com](https://dliu.com) | dliu-com/home-site | personal: DL |
-| [home.dliu.com](https://home.dliu.com) | dliu-com/home | personal: DL |
 | [jh.dliu.com](https://jh.dliu.com) | dliu-com/hujia | personal: DL |
 | [cyy.dliu.com](https://cyy.dliu.com) | dliu-com/chenyiyu (folder `chenyiyu-master`) | personal: cake |
 | link.dliu.com | local folder `link-router` | none (redirects only, no pages) |
