@@ -83,7 +83,23 @@ new look; load the shared files below and build the app's own pages with them.
 
 ## Docs, About and How it works pages
 
-Load `dl-docs.css` after `dl.css`, and use the shared tabs between the sections:
+Every app has one `/docs` page with `dl-tabs` between its sections, in this order:
+
+| Tab | Anchor | Who has it |
+| --- | --- | --- |
+| Architecture | `#architecture` | every app (first tab; always "Architecture", not "Technical architecture") |
+| the app's own sections (Cost, Security, …) | `#cost`, `#security`, … | as the app needs |
+| API | `#api` | apps with a managed API; machine version at `/docs/api.md` |
+| Testing | `#health` | every app; machine version at `/docs/health.md` |
+
+The old `/docs/api` and `/docs/health` pages answer `301` to `/docs#api` and `/docs#health`. The API and Testing tabs are
+for people who aren't technical: show rather than tell, with flows, numbers, tables and charts (the `dg-*` kit below),
+naming endpoints or pages only at a high level (no status codes, headers, JSON or code), and end with one link to the
+Markdown version, which carries every technical detail for machines and AI agents. What the Testing tab and
+`/docs/health.md` must contain is the dliu.com health contract (`HEALTH.md` in dliu-com/status), which
+[status.dliu.com](https://status.dliu.com) tests against.
+
+Load `dl-docs.css` after `dl.css`:
 
 ```html
 <link rel="stylesheet" href="https://files.dliu.com/dliu.com/ui/v1/dl.css">
@@ -91,14 +107,20 @@ Load `dl-docs.css` after `dl.css`, and use the shared tabs between the sections:
 …
 <main class="dl-main dl-docs-main">
   <nav class="dl-tabs" aria-label="Docs sections">
-    <a href="/docs#architecture" aria-current="page">Technical architecture</a>
-    <a href="/docs#cost">Cost</a>
-    <a href="/docs#security">Security</a>
-    <a href="/docs/api">API</a>
+    <a href="#architecture" aria-current="page">Architecture</a>
+    <a href="#cost">Cost</a>
+    <a href="#security">Security</a>
+    <a href="#api">API</a>
+    <a href="#health">Testing</a>
   </nav>
-  <article class="dl-docs">
+  <article id="architecture" class="dl-docs">
     <h2>How it works</h2>
     <p class="lead">…</p>
+  </article>
+  <article id="health" class="dl-docs" hidden>
+    <h2>Testing</h2>
+    …
+    <p><a href="/docs/health.md">Technical version for machines (Markdown)</a></p>
   </article>
 </main>
 ```
