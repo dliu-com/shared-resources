@@ -2,7 +2,9 @@
 // Publishes public/ to https://files.dliu.com/dliu.com/ through the Files managed API (dliu-com/file-server).
 // public/ui/v1/dl.css becomes https://files.dliu.com/dliu.com/ui/v1/dl.css.
 //
-//   FILES_API_URL=<FileServer MicrosoftApiUrl> FILES_BUCKET=<FileServer FileBucketName> node scripts/publish.mjs [--dry-run]
+//   FILES_API_URL=<FileServer MicrosoftApiUrl> FILES_BUCKET=<FileServer FileBucketName> node scripts/publish.mjs [--dry-run] [--force [path …]]
+//
+// --force re-sends the given files (paths under public/, e.g. ui/v1/dl.css), or every file, even when unchanged.
 //
 // dliu.com/ is view-only on the Files website; only the managed API (a Microsoft access token from auth.dliu.com with
 // files.write and the api.access role) can change it, and doing so keeps the Files listing accurate. The token comes
@@ -72,7 +74,11 @@ async function readToken() {
 }
 
 async function main() {
-  const dryRun = process.argv.includes('--dry-run');
+  const args = process.argv.slice(2);
+  const dryRun = args.includes('--dry-run');
+  const forceAt = args.indexOf('--force');
+  const forced = forceAt === -1 ? null : args.slice(forceAt + 1).filter((a) => !a.startsWith('--'));
+  const isForced = (rel) => forced !== null && (forced.length === 0 || forced.includes(rel));
   const bucket = process.env.FILES_BUCKET;
   if (!bucket || !/^[a-z0-9.-]{3,63}$/.test(bucket)) throw new Error('Set FILES_BUCKET to the FileServer FileBucketName output (make does this)');
 
@@ -84,7 +90,7 @@ async function main() {
     const bytes = await readFile(file);
     const key = `${PREFIX}/${rel}`;
     const live = await head(bucket, key);
-    if (live && sameBytes(live, bytes) && live.ContentType === type) {
+    if (!isForced(rel) && live && sameBytes(live, bytes) && live.ContentType === type) {
       console.log(`unchanged  ${SITE}/${key}`);
       continue;
     }

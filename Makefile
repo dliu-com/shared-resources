@@ -4,7 +4,7 @@ output = $(shell aws cloudformation describe-stacks --region $(AWS_REGION) --sta
 	--query "Stacks[0].Outputs[?OutputKey=='$(1)'].OutputValue" --output text)
 FILES_BUCKET ?= $(call output,FileBucketName)
 
-.PHONY: check publish audit
+.PHONY: check publish force audit
 
 # Lists what publish would send (files whose bytes or type differ from the object in S3).
 check:
@@ -14,6 +14,10 @@ check:
 # with the Microsoft access token saved from auth.dliu.com (~/.dliu_token).
 publish:
 	FILES_BUCKET="$(FILES_BUCKET)" FILES_API_URL="$${FILES_API_URL:-$(call output,MicrosoftApiUrl)}" node scripts/publish.mjs
+
+# Re-sends files even if unchanged: make force FILES="ui/v1/dl.css" (or every file without FILES).
+force:
+	FILES_BUCKET="$(FILES_BUCKET)" FILES_API_URL="$${FILES_API_URL:-$(call output,MicrosoftApiUrl)}" node scripts/publish.mjs --force $(FILES)
 
 # Checks the live pages of every site in sites.json for the shared look (stylesheet, logos, header, footer, CSP).
 audit:

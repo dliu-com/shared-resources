@@ -37,6 +37,7 @@ its bucket (eu-west-1), and the token saved with **Save file** at https://auth.d
 ```sh
 make check     # lists files whose bytes or type differ from the object in S3
 make publish   # uploads only those files through the Files API
+make force FILES="ui/v1/dl.css"   # re-sends named files (or all) even if unchanged
 ```
 
 - Unchanged files are found by comparing each file with its S3 object (size, ETag, type), not the CDN copy.
