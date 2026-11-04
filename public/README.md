@@ -125,7 +125,15 @@ Load `dl-docs.css` after `dl.css`:
 </main>
 ```
 
-`dl-docs` styles the article: headings, `.lead`, lists, `code`, `pre.code`, tables in `.table-wrap`, `.source`. The `dg-*`
+`dl-docs` styles the article: headings, `.lead`, lists, `code`, `pre.code`, tables in `.table-wrap`, `.source`.
+
+The Technical architecture section starts with a link to the app's source code, before anything else:
+
+```html
+<p class="dl-docs-repo"><span data-zh="源代码：">Source code:</span> <a href="https://github.com/dliu-com/APP">github.com/dliu-com/APP</a></p>
+```
+
+Translate the label the way the app does its other text; the link text stays the same in both languages. The `dg-*`
 classes are the diagram kit (`dg-stats`/`dg-stat`, `dg-flow`/`dg-step`/`dg-arrow`, `dg-tier`/`dg-node`, `dg-callout`,
 `dg-more`, `dg-icon` with `--dg` set to its colour, and the `dg-untrusted`, `dg-edge`, `dg-private`, `dg-app`,
 `dg-good`, `dg-warn`, `dg-bad` variants); the app's diagram script builds them.
